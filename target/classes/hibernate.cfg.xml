@@ -8,11 +8,12 @@
 
         <!-- DB -->
 <property name="hibernate.connection.driver_class">
-    com.mysql.jdbc.Driver
+  <!--   com.mysql.jdbc.Driver  -->
+    com.mysql.cj.jdbc.Driver
 </property>
 
 <property name="hibernate.connection.url">
-jdbc:mysql://yamabiko.proxy.rlwy.net:37933/railway?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC
+jdbc:mysql://yamabiko.proxy.rlwy.net:37933/railway?useSSL=true&amp;requireSSL=false&amp;verifyServerCertificate=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC
 </property>
 
 <property name="hibernate.connection.username">
