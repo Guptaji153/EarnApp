@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Campaign Management | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/campaignList.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <ui:include src="/common/navbar.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📢</div>
+                    <div>
+                        <h2>Campaign Management</h2>
+                        <p>Manage and monitor all platform campaigns</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH SECTION -->
+            <div class="searchBox">
+                <div class="search-header">
+                    <span class="search-icon">🔍</span>
+                    <h3>Search Campaigns</h3>
+                </div>
+                
+                <h:form>
+                    <div class="search-controls">
+                        <div class="search-input-wrapper">
+                            <h:inputText value="#{adminCampaignController.searchText}" 
+                                       required="false" 
+                                       styleClass="search-input"
+                                       placeholder="Search by campaign title..." />
+                        </div>
+                        
+                        <div class="search-type-wrapper">
+                            <span class="search-type-label">Search Type:</span>
+                            <h:selectOneMenu value="#{adminCampaignController.searchType}" styleClass="search-select">
+                                <f:selectItem itemValue="contains" itemLabel="Contains" />
+                                <f:selectItem itemValue="starts" itemLabel="Starts With" />
+                            </h:selectOneMenu>
+                        </div>
+                        
+                        <div class="search-buttons">
+                            <h:commandButton value="🔍 Search" styleClass="btn-search" action="#{adminCampaignController.search}" />
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">📋</span>
+                    <h3>All Campaigns</h3>
+                    <span class="record-badge" rendered="#{not empty adminCampaignController.campaigns}">
+                        #{adminCampaignController.totalRecords} Total
+                    </span>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:form>
+                        <h:dataTable value="#{adminCampaignController.campaigns}" var="c" styleClass="campaign-table" rendered="#{not empty adminCampaignController.campaigns}">
+                            
+                            <!-- CAMPAIGN TITLE -->
+                            <h:column>
+                                <f:facet name="header">Campaign</f:facet>
+                                <div class="cell-title">
+                                    <span class="title-icon">🎯</span>
+                                    <h:link value="#{c.taskTitle}" outcome="/admin/campaignDetails.xhtml" styleClass="campaign-link">
+                                        <f:param name="taskId" value="#{c.taskId}"/>
+                                    </h:link>
+                                </div>
+                            </h:column>
+
+                            <!-- PARTNER -->
+                            <h:column>
+                                <f:facet name="header">Partner</f:facet>
+                                <div class="cell-partner">
+                                    <span class="partner-icon">🤝</span>
+                                    <span>#{c.partnerName}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- STATUS -->
+                            <h:column>
+                                <f:facet name="header">Status</f:facet>
+                                <div class="cell-status">
+                                    <span class="status-badge status-#{c.status}">#{c.status}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- LIMIT -->
+                            <h:column>
+                                <f:facet name="header">Limit</f:facet>
+                                <div class="cell-number">
+                                    <span class="number-icon">📊</span>
+                                    <span>#{c.submissionLimit}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- ACCEPTED -->
+                            <h:column>
+                                <f:facet name="header">Accepted</f:facet>
+                                <div class="cell-number success">
+                                    <span class="accepted-icon">✅</span>
+                                    <span>#{c.accepted}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- PENDING -->
+                            <h:column>
+                                <f:facet name="header">Pending</f:facet>
+                                <div class="cell-number warning">
+                                    <span class="pending-icon">⏳</span>
+                                    <span>#{c.pending}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- REJECTED -->
+                            <h:column>
+                                <f:facet name="header">Rejected</f:facet>
+                                <div class="cell-number danger">
+                                    <span class="rejected-icon">❌</span>
+                                    <span>#{c.rejected}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- SLOTS LEFT -->
+                            <h:column>
+                                <f:facet name="header">Slots Left</f:facet>
+                                <div class="cell-slots">
+                                    <div class="slots-wrapper">
+                                        <div class="slots-bar" style="width:#{c.slotsLeft / c.submissionLimit * 100}%"></div>
+                                        <span class="slots-count">#{c.slotsLeft}</span>
+                                    </div>
+                                </div>
+                            </h:column>
+                            
+                        </h:dataTable>
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state" rendered="#{empty adminCampaignController.campaigns}">
+                            <div class="empty-icon">📭</div>
+                            <h3>No Campaigns Found</h3>
+                            <p>No campaigns match your search criteria. Try different keywords or clear the search.</p>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="paginationWrapper" rendered="#{not empty adminCampaignController.campaigns}">
+                <div class="paginationLeft">
+                    <h:form>
+                        <h:commandButton value="← Previous" styleClass="#{adminCampaignController.page eq 0 ? 'pageBtnDisabled' : 'pageBtn'}" 
+                                       action="#{adminCampaignController.previousPage}" disabled="#{adminCampaignController.page eq 0}" />
+
+                        <span class="pageInfo">Page #{adminCampaignController.page + 1} of #{adminCampaignController.totalPages}</span>
+
+                        <h:commandButton value="Next →" styleClass="#{adminCampaignController.page + 1 ge adminCampaignController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}" 
+                                       action="#{adminCampaignController.nextPage}" disabled="#{adminCampaignController.page + 1 ge adminCampaignController.totalPages}" />
+                    </h:form>
+                </div>
+
+                <div class="paginationRight">
+                    <span class="recordInfo">
+                        📊 Showing #{adminCampaignController.page * adminCampaignController.pageSize + 1} -
+                        #{(adminCampaignController.page * adminCampaignController.pageSize) + adminCampaignController.campaigns.size()} of
+                        #{adminCampaignController.totalRecords} records
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+       <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

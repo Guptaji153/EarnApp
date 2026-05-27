@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+<class name="TaskRequest" table="task_requests">
+
+<id name="id" column="id">
+<generator class="identity"/>
+</id>
+
+<property name="title" column="title"/>
+<property name="description" column="description"/>
+<property name="steps" column="steps"/>
+
+<property name="country" column="country"/>
+
+<property name="partnerId" column="partner_id"/>
+
+<property name="requestedReward"
+column="requested_reward"/>
+
+<property name="notes" column="notes"/>
+
+<property name="status" column="status"/>
+
+<property name="createdAt" column="created_at"/>
+
+</class>
+</hibernate-mapping>

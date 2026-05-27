@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+    <class name="PaymentOption" table="payment_options">
+
+        <!-- Primary Key -->
+        <id name="id" column="id" type="long">
+            <generator class="identity"/>
+        </id>
+
+        <!-- Payment option details -->
+        <property name="label" column="label" type="string"/>
+        <property name="value" column="value" type="string"/>
+        <property name="country" column="country" type="string"/>
+
+        <property name="inputLabel" column="input_label" type="string"/>
+        <property name="placeholder" column="placeholder" type="string"/>
+
+        <property name="isActive" column="is_active" type="boolean"/>
+
+    </class>
+
+</hibernate-mapping>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Submission Details | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/submissionHistoryDetails.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <f:metadata>
+        <f:viewParam name="submissionId" value="#{adminSubmissionController.submissionId}"/>
+        <f:event type="preRenderView" listener="#{adminSubmissionController.loadHistorySubmissionDetails}"/>
+    </f:metadata>
+
+    <div class="layout">
+        <!-- SIDEBAR - Same as admin dashboard -->
+        <ui:include src="/common/navbar.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📋</div>
+                    <div>
+                        <h2>Submission Details</h2>
+                        <p>Complete submission information</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages globalOnly="true" 
+                       infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- TASK INFORMATION CARD -->
+            <div class="details-card">
+                <div class="card-header">
+                    <span class="card-icon">🎯</span>
+                    <h3>Task Information</h3>
+                    <h:link outcome="/admin/submissionHistory.xhtml" styleClass="back-btn">
+                        <span class="btn-icon">←</span>
+                        Back to History
+                    </h:link>
+                </div>
+                
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">🆔</span>
+                            <span>Task ID</span>
+                        </div>
+                        <div class="detail-value">#{adminSubmissionController.selectedSubmission.taskId}</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">📝</span>
+                            <span>Title</span>
+                        </div>
+                        <div class="detail-value">#{adminSubmissionController.selectedSubmission.taskTitle}</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">💰</span>
+                            <span>Reward</span>
+                        </div>
+                        <div class="detail-value reward-amount">₹#{adminSubmissionController.selectedSubmission.reward}</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">🔗</span>
+                            <span>URL</span>
+                        </div>
+                        <div class="detail-value">
+                            <h:outputLink value="#{adminSubmissionController.selectedSubmission.taskUrl}" target="_blank" styleClass="url-link">
+                                #{adminSubmissionController.selectedSubmission.taskUrl}
+                                <span class="external-icon">🔗</span>
+                            </h:outputLink>
+                        </div>
+                    </div>
+
+                    <div class="detail-item full-width">
+                        <div class="detail-label">
+                            <span class="label-icon">📄</span>
+                            <span>Description</span>
+                        </div>
+                        <div class="detail-value description-text">#{adminSubmissionController.selectedSubmission.description}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUBMISSION INFORMATION CARD -->
+            <div class="details-card">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <h3>Submission Information</h3>
+                </div>
+                
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">👤</span>
+                            <span>User</span>
+                        </div>
+                        <div class="detail-value">#{adminSubmissionController.selectedSubmission.userName}</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">⚡</span>
+                            <span>Status</span>
+                        </div>
+                        <div class="detail-value">
+                            <span class="status-badge status-#{adminSubmissionController.selectedSubmission.status}">
+                                #{adminSubmissionController.selectedSubmission.status}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">📅</span>
+                            <span>Submitted At</span>
+                        </div>
+                        <div class="detail-value">
+                            <h:outputText value="#{adminSubmissionController.selectedSubmission.submittedAt}">
+                                <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                            </h:outputText>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">✅</span>
+                            <span>Verified At</span>
+                        </div>
+                        <div class="detail-value">
+                            <h:outputText value="#{adminSubmissionController.selectedSubmission.verifiedAt}" rendered="#{not empty adminSubmissionController.selectedSubmission.verifiedAt}">
+                                <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                            </h:outputText>
+                            <span class="empty-value" rendered="#{empty adminSubmissionController.selectedSubmission.verifiedAt}">—</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">✓</span>
+                            <span>Verified By</span>
+                        </div>
+                        <div class="detail-value">#{empty adminSubmissionController.selectedSubmission.adminName ? 'System' : adminSubmissionController.selectedSubmission.adminName}</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span class="label-icon">💬</span>
+                            <span>Rejection Reason</span>
+                        </div>
+                        <div class="detail-value reason-text">#{empty adminSubmissionController.selectedSubmission.rejectionReason ? '—' : adminSubmissionController.selectedSubmission.rejectionReason}</div>
+                    </div>
+
+                    <div class="detail-item full-width">
+                        <div class="detail-label">
+                            <span class="label-icon">📝</span>
+                            <span>Proof Description</span>
+                        </div>
+                        <div class="detail-value description-text">#{adminSubmissionController.selectedSubmission.proofDescription}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROOF CARD -->
+            <div class="proof-card">
+                <div class="card-header">
+                    <span class="card-icon">🖼️</span>
+                    <h3>Submission Proof</h3>
+                </div>
+                
+                <div class="proof-container" rendered="#{not empty adminSubmissionController.selectedSubmission.proofPath}">
+                    <div class="proof-wrapper">
+                        <img src="#{request.contextPath}/image?path=#{adminSubmissionController.selectedSubmission.proofPath}" 
+                             alt="Submission Proof" 
+                             class="proof-image"
+                             onclick="openModal(this.src)"/>
+                        <div class="proof-overlay" onclick="openModal(this.parentElement.querySelector('img').src)">
+                            <span class="zoom-icon">🔍</span>
+                            <span>Click to zoom</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="proof-empty" rendered="#{empty adminSubmissionController.selectedSubmission.proofPath}">
+                    <div class="empty-icon">📷</div>
+                    <p>No proof image uploaded</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE MODAL FOR ZOOM -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="modal-close" onclick="closeModal()">&#215;</span>
+        <img class="modal-content" id="modalImage"/>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+    <script type="text/javascript">
+
+//<![CDATA[
+
+// ================= IMAGE MODAL =================
+
+function openModal(src) {
+
+    const modal =
+    document.getElementById('imageModal');
+
+    const modalImg =
+    document.getElementById('modalImage');
+
+    modal.style.display = 'flex';
+
+    modalImg.src = src;
+
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+
+    const modal =
+    document.getElementById('imageModal');
+
+    modal.style.display = 'none';
+
+    document.body.style.overflow = '';
+}
+
+// CLOSE MODAL ON ESCAPE
+
+document.addEventListener(
+'keydown',
+function(event) {
+
+    if(event.key === 'Escape') {
+
+        closeModal();
+    }
+});
+
+// ================= SIDEBAR =================
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE MOBILE MENU
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // RESET ON DESKTOP
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+
+</script>
+</h:body>
+</html>

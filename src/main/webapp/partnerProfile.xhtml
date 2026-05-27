@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+	<title>My Profile | Earn</title>
+	
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+	<link rel="stylesheet" href="#{request.contextPath}/css/profile.css"/>
+</h:head>
+
+<h:body>
+	<div class="layout">
+		<!-- Left Sidebar Navbar -->
+		<ui:include src="/common/partnerNav.xhtml"/>
+		
+		<!-- Main Content -->
+		<div class="main">
+			<div class="profile-container">
+				<div class="profile-card">
+					<!-- Header Section -->
+					<div class="profile-header">
+						<div class="profile-avatar">
+							<div class="avatar-wrapper">
+								<span class="avatar-initials">
+									#{sessionScope.loggedUser.fullName.substring(0,1)}
+								</span>
+								<div class="avatar-status online"></div>
+							</div>
+						</div>
+						<h1>My Profile</h1>
+						<p>View and manage your personal information</p>
+					</div>
+
+					<!-- Profile Info Section -->
+					<div class="profile-info">
+						<div class="info-grid">
+							<!-- Full Name -->
+							<div class="info-card">
+								<div class="info-icon">👤</div>
+								<div class="info-content">
+									<label>Full Name</label>
+									<h3>#{sessionScope.loggedUser.fullName}</h3>
+								</div>
+							</div>
+
+							<!-- Email -->
+							<div class="info-card">
+								<div class="info-icon">📧</div>
+								<div class="info-content">
+									<label>Email Address</label>
+									<h3>#{sessionScope.loggedUser.email}</h3>
+								</div>
+							</div>
+
+							<!-- Phone -->
+							<div class="info-card">
+								<div class="info-icon">📱</div>
+								<div class="info-content">
+									<label>Phone Number</label>
+									<h3>#{sessionScope.loggedUser.phone}</h3>
+								</div>
+							</div>
+
+							<!-- Role -->
+							<div class="info-card">
+								<div class="info-icon">⭐</div>
+								<div class="info-content">
+									<label>Role</label>
+									<h3 class="role-badge">#{sessionScope.loggedUser.role}</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Action Buttons -->
+					<div class="profile-actions">
+						<h:link value="Reset Password" outcome="/partner/partnerResetPass" styleClass="btn btn-primary">
+							<span class="btn-icon">🔒</span>
+							<span class="btn-text">Reset Password</span>
+						</h:link>
+						
+						<h:link value="Back to Dashboard" outcome="/partner/partnerDashboard" styleClass="btn btn-secondary">
+							<span class="btn-icon">←</span>
+							<span class="btn-text">Back to Dashboard</span>
+						</h:link>
+					</div>
+
+					<!-- Additional Stats -->
+					<div class="profile-stats">
+						<div class="stat-item">
+							<span class="stat-value">100%</span>
+							<span class="stat-label">Profile Complete</span>
+						</div>
+						
+						<div class="stat-item">
+							<span class="stat-value">Active</span>
+							<span class="stat-label">Account Status</span>
+						</div>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Add animation to profile cards on scroll
+		const observerOptions = {
+			threshold: 0.1,
+			rootMargin: '0px 0px -50px 0px'
+		};
+		
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.style.opacity = '1';
+					entry.target.style.transform = 'translateY(0)';
+				}
+			});
+		}, observerOptions);
+		
+		document.querySelectorAll('.info-card, .stat-item').forEach(el => {
+			el.style.opacity = '0';
+			el.style.transform = 'translateY(20px)';
+			el.style.transition = 'all 0.5s ease';
+			observer.observe(el);
+		});
+		
+		// Add hover effect for buttons
+		const buttons = document.querySelectorAll('.btn');
+		buttons.forEach(btn => {
+			btn.addEventListener('mouseenter', function() {
+				this.style.transform = 'translateY(-2px)';
+			});
+			btn.addEventListener('mouseleave', function() {
+				this.style.transform = 'translateY(0)';
+			});
+		});
+		
+		// Set active menu item in sidebar
+		const currentPath = window.location.pathname;
+		const menuLinks = document.querySelectorAll('.menu a');
+		menuLinks.forEach(link => {
+			const href = link.getAttribute('href');
+			if (href &amp; currentPath.includes(href)) {
+				link.classList.add('active');
+			}
+		});
+	</script>
+</h:body>
+
+</html>

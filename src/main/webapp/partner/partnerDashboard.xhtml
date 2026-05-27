@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Partner Dashboard | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/partner-dashboard.css"/>
+</h:head>
+
+<h:body>
+<!-- MOBILE MENU BUTTON -->
+
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<!-- OVERLAY -->
+
+<div class="overlay"
+     id="overlay"></div>
+     
+     
+    <div class="layout">
+        <!-- SIDEBAR - Partner Style -->
+        <ui:include src="/common/partnerNav.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">🤝</div>
+                    <div>
+                        <h2>Partner Dashboard</h2>
+                        <p>Welcome back, <b>#{sessionScope.loggedUser.fullName}</b>! Manage your campaigns and track performance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- CREATE CAMPAIGN FORM (Shows only when clicked from sidebar) -->
+            <div class="form-card" rendered="#{taskController.showCreateTask}">
+                <div class="card-header">
+                    <span class="card-icon">📝</span>
+                    <h3>Create New Campaign</h3>
+                    <h:form>
+                    <h:commandButton value="✕ Close" action="#{taskController.closeCreateTask}" styleClass="close-btn"/>
+                    </h:form>
+                </div>
+                
+                <div class="card-body">
+                    <h:form>
+                        <div class="form-group">
+                            <label class="form-label">Campaign Title</label>
+                            <h:inputText value="#{taskController.task.title}" styleClass="form-input" placeholder="Enter campaign title"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <h:inputTextarea value="#{taskController.task.description}" styleClass="form-textarea" rows="3" placeholder="Describe what users need to do"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Steps to Complete</label>
+                            <h:inputTextarea value="#{taskController.task.steps}" styleClass="form-textarea" rows="3" placeholder="List the steps to complete this task"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Campaign URL</label>
+                            <h:inputText value="#{taskController.task.url}" styleClass="form-input" placeholder="https://example.com/campaign"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Target Country</label>
+                            <h:inputText value="#{taskController.task.country}" styleClass="form-input" placeholder="e.g., India, USA, UK"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Reward Amount (₹)</label>
+                            <h:inputText value="#{taskController.task.reward}" styleClass="form-input" placeholder="Enter reward amount"/>
+                        </div>
+
+                        <div class="form-actions">
+                            <h:commandButton value="✓ Submit For Review" action="#{taskController.createTask}" styleClass="btn-submit"/>
+                            <h:commandButton value="✗ Cancel" action="#{taskController.closeCreateTask}" styleClass="btn-cancel"/>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- DASHBOARD STATS (Shows by default) -->
+            <div class="stats-container" rendered="#{!taskController.showCreateTask}">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <h2>#{taskController.totalCampaigns}</h2>
+                            <p>Total Campaigns</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h2>#{taskController.liveCampaigns}</h2>
+                            <p>Active Campaigns</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <h2>#{taskController.draftCampaigns}</h2>
+                            <p>Draft Campaigns</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-rejected">
+                        <div class="stat-icon">❌</div>
+                        <div class="stat-info">
+                            <h2>#{taskController.rejectedCampaigns}</h2>
+                            <p>Rejected Campaigns</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h2>#{taskController.usersCompleted}</h2>
+                            <p>Users Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO SECTION -->
+            <div class="info-card" rendered="#{!taskController.showCreateTask}">
+                <div class="info-header">
+                    <span class="info-icon">ℹ️</span>
+                    <h3>Quick Tips</h3>
+                </div>
+                <div class="info-content">
+                    <ul class="tips-list">
+                        <li>Create engaging campaigns with clear instructions</li>
+                        <li>Set competitive rewards to attract more users</li>
+                        <li>Review campaign performance regularly</li>
+                        <li>Monitor user submissions and provide feedback</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+   <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+
+</script>
+</h:body>
+</html>

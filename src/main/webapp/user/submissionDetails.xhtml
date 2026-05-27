@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+<title>Submission Details</title>
+
+<link rel="stylesheet" href="#{request.contextPath}/css/userDashboard.css"/>
+
+</h:head>
+
+<h:body>
+
+<f:metadata>
+    <f:viewParam name="taskId" value="#{userTaskController.taskId}"/>
+    <f:event type="preRenderView" listener="#{userTaskController.loadSubmissionDetails}"/>
+</f:metadata>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <ui:include src="/common/userNavbar.xhtml"/>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <div class="header">
+            <h2>📄 Submission Details</h2>
+            <p>Track your task submission status</p>
+        </div>
+
+        <!-- MAIN CARD -->
+        <div class="submission-card">
+
+            <!-- TASK INFO -->
+            <div class="section">
+
+                <h3>🧾 Task Information</h3>
+
+                <div class="title">
+                    #{userTaskController.selectedTask.title}
+                </div>
+
+                <div class="desc">
+                    #{userTaskController.selectedTask.description}
+                </div>
+
+                <div class="reward">
+                    💰 ₹#{userTaskController.selectedTask.reward}
+                </div>
+
+            </div>
+
+            <!-- SUBMISSION INFO -->
+            <div class="section">
+
+                <h3>📤 Your Submission</h3>
+
+                <div class="info-row">
+                    <b>Submitted At:</b>
+                    #{userTaskController.selectedSubmission.submittedAt}
+                </div>
+
+                <div class="info-row">
+                    <b> Proof Description:</b>
+                    #{userTaskController.selectedSubmission.proofDescription}
+                </div>
+
+            </div>
+
+            <!-- PROOF IMAGE -->
+            <div class="section">
+
+                <h3>📸 Proof Screenshot</h3>
+
+             <!--    <img 
+                    src="/earn_storage/#{userTaskController.selectedSubmission.proofPath}" 
+                    class="proof-img"/>   -->
+                    
+                    <h:graphicImage 
+    value="/image?path=#{userTaskController.selectedSubmission.proofPath}" 
+    styleClass="proof-img"/>
+
+            </div>
+
+            <!-- STATUS -->
+            <div class="section status-section">
+
+                <h3>📊 Status</h3>
+
+                <!-- PENDING -->
+                <h:panelGroup rendered="#{userTaskController.selectedSubmission.status eq 'PENDING'}">
+                    <div class="status-badge pending">⏳ Pending Review</div>
+                </h:panelGroup>
+
+                <!-- ACCEPTED -->
+                <h:panelGroup rendered="#{userTaskController.selectedSubmission.status eq 'ACCEPTED'}">
+                    <div class="status-badge approved">✅ Approved</div>
+                </h:panelGroup>
+
+                <!-- REJECTED -->
+                <h:panelGroup rendered="#{userTaskController.selectedSubmission.status eq 'REJECTED'}">
+                    <div class="status-badge rejected">❌ Rejected</div>
+
+                    <div class="rejection-box">
+                        <b>Reason:</b>
+                        #{userTaskController.selectedSubmission.rejectionReason}
+                    </div>
+                </h:panelGroup>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</h:body>
+</html>

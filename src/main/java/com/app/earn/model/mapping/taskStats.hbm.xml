@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+<class name="TaskStats" table="task_stats">
+
+<id name="taskId" column="task_id" type="long">
+<generator class="assigned"/>
+</id>
+
+<property name="totalSubmissions"
+column="total_submissions"
+type="int"/>
+
+<property name="accepted"
+column="accepted"
+type="int"/>
+
+<property name="rejected"
+column="rejected"
+type="int"/>
+
+<property name="pending"
+column="pending"
+type="int"/>
+
+</class>
+
+</hibernate-mapping>

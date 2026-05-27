@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Earn | Home</title>
+
+    <link rel="stylesheet" href="#{request.contextPath}/css/indexs.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+</h:head>
+
+<h:body>
+
+    <!-- NAVBAR -->
+    <ui:include src="/common/indexnav.xhtml"/>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Pay Only for <span>Conversions</span></h1>
+            <p>
+                Don’t pay for impressions!  
+                The hassle-free micro-gigs platform where real people help
+                your business grow with zero risk.
+            </p>
+
+            <div class="hero-btns">
+                <button class="btn-primary">Start Campaign</button>
+                <button class="btn-secondary">App</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUSTED -->
+    <section class="trusted">
+        <p>Trusted by the world’s best</p>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div>
+            <h2>Ready to grow your business<br/>hustle-free?</h2>
+            <p>Join hundreds of businesses getting guaranteed results.</p>
+            <br/>
+            <button class="btn-primary">Post Micro Jobs!</button>
+        </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="steps">
+        <h2>Get Results in 3 Simple Steps</h2>
+
+        <div class="steps-grid">
+            <div class="step-box">
+                <h3>Post Campaign</h3>
+                <p>Define goals, instructions and budget.</p>
+            </div>
+            <div class="step-box">
+                <h3>Users Work</h3>
+                <p>Verified users complete tasks.</p>
+            </div>
+            <div class="step-box">
+                <h3>Verify &amp; Grow</h3>
+                <p>Pay only for completed tasks.</p>
+            </div>
+            <div class="step-box">
+                <h3>30-Day Assurance</h3>
+                <p>Money back guarantee.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+        <div>
+            <h3>95%</h3>
+            <p>Satisfaction Rate</p>
+        </div>
+        <div>
+            <h3>200+</h3>
+            <p>Clients</p>
+        </div>
+        <div>
+            <h3>5K</h3>
+            <p>Orders Completed</p>
+        </div>
+        <div>
+            <h3>150+</h3>
+            <p>Global Brands</p>
+	</div>
+    </section>
+
+    <!-- FOOTER -->
+    <ui:include src="/common/footer.xhtml"/>
+
+    <!-- SCROLL BUTTON -->
+    <button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script>
+        const btn = document.getElementById("scrollTopBtn");
+        window.addEventListener("scroll", function () {
+            btn.style.display = window.scrollY > 300 ? "block" : "none";
+        });
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+
+</h:body>
+</html>

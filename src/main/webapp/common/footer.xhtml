@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:body>
+    <div class="footer">
+        <p>© 2026 Earn Platform. All rights reserved.</p>
+    </div>
+
+    <!-- Scroll to top button -->
+    <button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script>
+        const btn = document.getElementById("scrollTopBtn");
+
+        window.onscroll = function () {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</h:body>
+</html>

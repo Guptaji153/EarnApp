@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+<title>Completed Tasks</title>
+<link rel="stylesheet" href="#{request.contextPath}/css/userDashboard.css"/>
+</h:head>
+
+<h:body>
+
+<div class="layout">
+
+    <ui:include src="/common/userNavbar.xhtml"/>
+
+    <div class="main">
+
+        <div class="header">
+            <h2>✅ Completed Tasks</h2>
+            <p>Tasks approved by admin</p>
+        </div>
+
+        <div class="cards">
+
+            <ui:repeat value="#{userTaskController.approvedTasks}" var="s">
+
+                <div class="card success-card">
+
+                    <div class="title">
+                        Task ID: #{s.taskId}
+                    </div>
+
+                    <div class="desc">
+                        Submitted on: #{s.submittedAt}
+                    </div>
+
+                    <!-- IMAGE 
+                    <img src="#{request.contextPath}/image?path=#{s.proofPath}"
+                         class="proof-img"/> -->
+
+                    <div class="status success">
+                        ✅ Approved
+                    </div>
+
+                    <h:link outcome="/user/submissionDetails.xhtml" styleClass="btn">
+    <f:param name="taskId" value="#{s.taskId}" />
+    View Details
+</h:link>
+
+                </div>
+
+            </ui:repeat>
+
+        </div>
+
+    </div>
+
+</div>
+
+</h:body>
+</html>

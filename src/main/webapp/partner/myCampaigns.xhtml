@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>My Campaigns | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/myCampaigns.css"/>
+</h:head>
+
+<h:body>
+<!-- MOBILE MENU BUTTON -->
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<!-- OVERLAY -->
+<div class="overlay"
+     id="overlay"></div>
+    <f:event type="preRenderView" listener="#{taskController.loadTasks}" />
+    
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <ui:include src="/common/partnerNav.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📢</div>
+                    <div>
+                        <h2>My Campaigns</h2>
+                        <p>View and manage all your created campaigns</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH SECTION -->
+            <div class="searchBox">
+                <div class="search-header">
+                    <span class="search-icon">🔍</span>
+                    <h3>Search Campaigns</h3>
+                </div>
+                
+                <h:form>
+                    <div class="search-controls">
+                        <div class="search-input-wrapper">
+                            <h:inputText value="#{taskController.searchText}" styleClass="search-input" placeholder="Search by title or description..."/>
+                        </div>
+                        
+                        <div class="search-type-wrapper">
+                            <span class="search-type-label">Search Type:</span>
+                            <h:selectOneRadio value="#{taskController.searchType}" layout="lineDirection" styleClass="search-radio">
+                                <f:selectItem itemLabel="Contains" itemValue="contains"/>
+                                <f:selectItem itemLabel="Starts With" itemValue="starts"/>
+                            </h:selectOneRadio>
+                        </div>
+                        
+                        <div class="search-buttons">
+                            <h:commandButton value="🔍 Search" action="#{taskController.search}" styleClass="btn-search"/>
+                            <h:commandButton value="Reset" action="#{taskController.resetFilters}" styleClass="btn-reset"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">📋</span>
+                    <h3>Campaigns List</h3>
+                    <span class="record-badge">#{taskController.totalRecords} Total</span>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:form>
+                        <h:dataTable value="#{taskController.myTasks}" var="t" styleClass="campaign-table" rendered="#{not empty taskController.myTasks}">
+                            
+                            <!-- TITLE -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span class="sort-icon">📌</span>
+                                        <span>Title</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲" action="#{taskController.sort('title')}"
+                                                styleClass="#{taskController.sortField eq 'title' and taskController.sortOrder eq 'ASC' ? 'active':''}"/>
+                                            <h:commandLink value="▼" action="#{taskController.sort('title')}"
+                                                styleClass="#{taskController.sortField eq 'title' and taskController.sortOrder eq 'DESC' ? 'active':''}"/>
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
+                                    <span class="cell-title">#{t.title}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- DESCRIPTION -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span class="sort-icon">📄</span>
+                                        <span>Description</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲" action="#{taskController.sort('description')}"/>
+                                            <h:commandLink value="▼" action="#{taskController.sort('description')}"/>
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
+                                    <span class="cell-description">#{t.description}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- STATUS -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span class="sort-icon">⚡</span>
+                                        <span>Status</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲" action="#{taskController.sort('status')}"/>
+                                            <h:commandLink value="▼" action="#{taskController.sort('status')}"/>
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
+                                    <span class="status-badge status-#{t.status}">#{t.status}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- CREATED DATE -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span class="sort-icon">📅</span>
+                                        <span>Created</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲" action="#{taskController.sort('createdAt')}"/>
+                                            <h:commandLink value="▼" action="#{taskController.sort('createdAt')}"/>
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
+                                    <span class="cell-date">
+                                        <h:outputText value="#{t.createdAt}">
+                                            <f:convertDateTime pattern="dd MMM yyyy"/>
+                                        </h:outputText>
+                                    </span>
+                                </div>
+                            </h:column>
+
+                            <!-- APPROVED DATE -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span class="sort-icon">✅</span>
+                                        <span>Approved</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲" action="#{taskController.sort('approvedAt')}"/>
+                                            <h:commandLink value="▼" action="#{taskController.sort('approvedAt')}"/>
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
+                                    <span class="cell-date">
+                                        <h:outputText value="#{t.approvedAt}" rendered="#{not empty t.approvedAt}">
+                                            <f:convertDateTime pattern="dd MMM yyyy"/>
+                                        </h:outputText>
+                                        <span rendered="#{empty t.approvedAt}">—</span>
+                                    </span>
+                                </div>
+                            </h:column>
+
+                            <!-- APPROVED BY -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span class="sort-icon">👤</span>
+                                        <span>Approved By</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲" action="#{taskController.sort('approvedByName')}"/>
+                                            <h:commandLink value="▼" action="#{taskController.sort('approvedByName')}"/>
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
+                                    <span class="cell-user">#{empty t.approvedByName ? '—' : t.approvedByName}</span>
+                                </div>
+                            </h:column>
+                            
+                        </h:dataTable>
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state" rendered="#{empty taskController.myTasks}">
+                            <div class="empty-icon">📭</div>
+                            <h3>No Campaigns Found</h3>
+                            <p>You haven't created any campaigns yet. Click "Create Campaign" to get started.</p>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="paginationWrapper" rendered="#{not empty taskController.myTasks}">
+                <div class="paginationLeft">
+                    <h:form>
+                        <div class="page-buttons">
+                            <h:commandButton value="← Previous" styleClass="pageBtn" action="#{taskController.prevPage}" disabled="#{taskController.page == 0}"/>
+                            <h:commandButton value="Next →" styleClass="pageBtn" action="#{taskController.nextPage}"/>
+                        </div>
+                    </h:form>
+                </div>
+
+                <div class="paginationRight">
+                    <span class="pageInfo">
+                        📄 Page #{taskController.currentPage} 
+                        (#{taskController.startRecord} - #{taskController.endRecord} of #{taskController.totalRecords})
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+   <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE MOBILE MENU
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // RESET DESKTOP
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+
+</script>
+</h:body>
+</html>

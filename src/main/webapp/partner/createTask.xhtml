@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+
+<title>Create Campaign</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Inter",Arial;
+}
+
+body{
+background:#f5f7fb;
+}
+
+.container{
+width:700px;
+margin:60px auto;
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+h2{
+margin-bottom:20px;
+color:#333;
+}
+
+label{
+display:block;
+margin-top:15px;
+font-size:14px;
+color:#555;
+}
+
+input,textarea,select{
+width:100%;
+padding:10px;
+margin-top:6px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:14px;
+}
+
+textarea{
+min-height:100px;
+}
+
+button{
+margin-top:20px;
+background:#5b6cff;
+border:none;
+color:white;
+padding:12px 20px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+}
+
+button:hover{
+background:#4b59e6;
+}
+
+.msg{
+margin-bottom:15px;
+color:green;
+}
+
+</style>
+
+</h:head>
+
+<h:body>
+
+<div class="container">
+
+<h2>Create Campaign</h2>
+
+<h:form>
+
+<h:messages styleClass="msg"/>
+
+<label>Title</label>
+
+<h:inputText value="#{taskController.task.title}" required="true"/>
+
+
+<label>Description</label>
+
+<h:inputTextarea value="#{taskController.task.description}" required="true"/>
+
+
+<label>Steps</label>
+
+<h:inputTextarea value="#{taskController.task.steps}" required="true"/>
+
+
+<label>Country</label>
+
+<h:inputText value="#{taskController.task.country}" required="true"/>
+
+
+<h:commandButton value="Submit For Review"
+action="#{taskController.createTask}"/>
+
+</h:form>
+
+</div>
+
+</h:body>
+</html>

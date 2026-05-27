@@ -1,0 +1,37 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<div class="sidebar">
+
+    <div class="profile">
+        <h:link outcome="/partnerProfile.xhtml" styleClass="profile-link">
+            <div class="avatar">
+                #{sessionScope.loggedUser.fullName.substring(0,1)}
+            </div>
+        </h:link>
+        <h:link outcome="/profile.xhtml" styleClass="profile-name">
+            #{sessionScope.loggedUser.fullName}
+        </h:link>
+    </div>
+
+    <div class="menu">
+        <h:link value="Dashboard" outcome="/partner/partnerDashboard.xhtml" styleClass="menu-link"/>
+        
+        <h:form>
+            <h:commandLink value="Create Campaign" action="#{taskController.openCreateTask}" styleClass="menu-link"/>
+        </h:form>
+        
+        <h:link value="My Campaigns" outcome="/partner/myCampaigns.xhtml" styleClass="menu-link"/>
+        
+        <h:link value="Campaign Performance" outcome="/partner/campaignPerformance.xhtml" styleClass="menu-link"/>
+    </div>
+
+    <h:form>
+        <h:commandButton value="Logout" action="#{authController.logout}" styleClass="logout"/>
+    </h:form>
+
+</div>
+
+</ui:composition>

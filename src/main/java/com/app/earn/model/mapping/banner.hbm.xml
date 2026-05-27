@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+    <class name="Banner" table="banners">
+
+        <!-- Primary Key -->
+        <id name="id" column="id" type="long">
+            <generator class="identity"/>
+        </id>
+
+        <!-- Banner details -->
+        <property name="title" column="title" type="string"/>
+        <property name="imagePath" column="image_path" type="string" not-null="true"/>
+        <property name="link" column="link" type="string"/>
+
+      <!-- Banner details  <property name="country" column="country" type="string"/> 
+        
+        <property name="country" column="country" type="string" length="2"/>   --> 
+        
+     <property name="country" type="string">
+    <column name="country" sql-type="char(2)"/>
+</property>
+     
+        
+        
+
+        <property name="isActive" column="is_active" type="boolean"/>
+
+        <property name="createdAt" column="created_at" type="timestamp"/>
+
+    </class>
+
+</hibernate-mapping>

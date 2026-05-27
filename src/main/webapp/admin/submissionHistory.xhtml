@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Submission History | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/submissionHistory.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR - Same as admin dashboard -->
+        <ui:include src="/common/navbar.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📜</div>
+                    <div>
+                        <h2>Submission History</h2>
+                        <p>View and manage all user task submissions</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH SECTION -->
+            <div class="searchBox">
+                <div class="search-header">
+                    <span class="search-icon">🔍</span>
+                    <h3>Search Submissions</h3>
+                </div>
+                
+                <h:form>
+                    <div class="search-controls">
+                        <div class="search-input-wrapper">
+                            <h:inputText value="#{adminSubmissionController.searchText}" 
+                                       required="false" 
+                                       styleClass="search-input"
+                                       placeholder="Search by user name..." />
+                        </div>
+                        
+                        <div class="search-buttons">
+                            <h:commandButton value="🔍 Search" styleClass="btn-search"
+                                action="#{adminSubmissionController.searchSubmissions}" />
+                            <h:commandButton value="Show All" styleClass="btn-showall"
+                                action="#{adminSubmissionController.showAll}" />
+                        </div>
+                    </div>
+
+                    <!-- RADIO BUTTON -->
+                    <div class="radioBox">
+                        <span class="radio-label">Search Type:</span>
+                        <h:selectOneRadio value="#{adminSubmissionController.searchType}" styleClass="radio-group">
+                            <f:selectItem itemValue="contains" itemLabel="Contains" />
+                            <f:selectItem itemValue="starts" itemLabel="Starts With" />
+                        </h:selectOneRadio>
+                    </div>
+                </h:form>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages globalOnly="true" 
+                       infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">📋</span>
+                    <h3>All Submissions</h3>
+                    <span class="record-badge" rendered="#{not empty adminSubmissionController.allSubmissions}">
+                        #{adminSubmissionController.totalRecords} Total
+                    </span>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:form>
+                        <h:dataTable value="#{adminSubmissionController.allSubmissions}" var="s"
+                                   rendered="#{not empty adminSubmissionController.allSubmissions}"
+                                   styleClass="submission-history-table">
+                            
+                            <!-- TASK ID -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Task ID</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminSubmissionController.sortBy('taskId')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'taskId' and adminSubmissionController.sortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminSubmissionController.sortBy('taskId')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'taskId' and adminSubmissionController.sortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="cell-taskid">
+                                    <span class="taskid-icon">🎯</span>
+                                    <h:link outcome="/admin/submissionHistoryDetails.xhtml" styleClass="taskid-link">
+                                        <f:param name="submissionId" value="#{s.id}" />
+                                        #{s.taskId}
+                                    </h:link>
+                                </div>
+                            </h:column>
+
+                            <!-- USER -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>User</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminSubmissionController.sortBy('userName')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'userName' and adminSubmissionController.sortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminSubmissionController.sortBy('userName')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'userName' and adminSubmissionController.sortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="cell-user">
+                                    <span class="user-icon">👤</span>
+                                    <span class="user-name">#{s.userName}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- PROOF -->
+                            <h:column>
+                                <f:facet name="header">Proof</f:facet>
+                                <div class="cell-proof">
+                                    <h:outputLink value="#{request.contextPath}/image" target="_blank" styleClass="proof-link" rendered="#{not empty s.proofPath}">
+                                        <f:param name="path" value="#{s.proofPath}" />
+                                        <span class="proof-icon">📎</span>
+                                        View Proof
+                                    </h:outputLink>
+                                    <span class="no-proof" rendered="#{empty s.proofPath}">No Proof</span>
+                                </div>
+                            </h:column>
+
+                            <!-- STATUS -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Status</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminSubmissionController.sortBy('status')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'status' and adminSubmissionController.sortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminSubmissionController.sortBy('status')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'status' and adminSubmissionController.sortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="cell-status">
+                                    <span class="status-badge status-#{s.status}">#{s.status}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- REASON -->
+                            <h:column>
+                                <f:facet name="header">Reason</f:facet>
+                                <div class="cell-reason">
+                                    <span class="reason-text">#{empty s.rejectionReason ? '—' : s.rejectionReason}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- VERIFIED BY -->
+                            <h:column>
+                                <f:facet name="header">Verified By</f:facet>
+                                <div class="cell-verifiedby">
+                                    <span class="verified-icon">✓</span>
+                                    <span>#{empty s.adminName ? 'System' : s.adminName}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- SUBMITTED -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Submitted</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminSubmissionController.sortBy('submittedAt')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'submittedAt' and adminSubmissionController.sortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminSubmissionController.sortBy('submittedAt')}"
+                                                styleClass="#{adminSubmissionController.sortField eq 'submittedAt' and adminSubmissionController.sortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <div class="cell-date">
+                                    <span class="date-icon">📅</span>
+                                    <h:outputText value="#{s.submittedAt}">
+                                        <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                                    </h:outputText>
+                                </div>
+                            </h:column>
+
+                            <!-- VERIFIED -->
+                            <h:column>
+                                <f:facet name="header">Verified</f:facet>
+                                <div class="cell-date">
+                                    <span class="date-icon">✅</span>
+                                    <h:outputText value="#{s.verifiedAt}" rendered="#{not empty s.verifiedAt}">
+                                        <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                                    </h:outputText>
+                                    <span rendered="#{empty s.verifiedAt}">—</span>
+                                </div>
+                            </h:column>
+                            
+                        </h:dataTable>
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state" rendered="#{empty adminSubmissionController.allSubmissions}">
+                            <div class="empty-icon">📭</div>
+                            <h3>No Submissions Found</h3>
+                            <p>No submissions match your search criteria. Try different keywords or clear the search.</p>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="paginationWrapper" rendered="#{not empty adminSubmissionController.allSubmissions}">
+                <div class="paginationLeft">
+                    <h:form>
+                        <h:commandButton value="← Previous"
+                            styleClass="#{adminSubmissionController.page == 0 ? 'pageBtnDisabled' : 'pageBtn'}"
+                            action="#{adminSubmissionController.previousPage}"
+                            disabled="#{adminSubmissionController.page == 0}" />
+
+                        <h:commandButton value="Next →"
+                            styleClass="#{adminSubmissionController.page + 1 >= adminSubmissionController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}"
+                            action="#{adminSubmissionController.nextPage}"
+                            disabled="#{adminSubmissionController.page + 1 >= adminSubmissionController.totalPages}" />
+                    </h:form>
+                </div>
+
+                <div class="paginationRight">
+                    <span class="pageInfo">📄 Page #{adminSubmissionController.page + 1} of #{adminSubmissionController.totalPages}</span>
+                    <span class="recordInfo">
+                        📊 Showing #{adminSubmissionController.page * adminSubmissionController.pageSize + 1} -
+                        #{(adminSubmissionController.page * adminSubmissionController.pageSize) + adminSubmissionController.allSubmissions.size()} of
+                        #{adminSubmissionController.totalRecords} records
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+       <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

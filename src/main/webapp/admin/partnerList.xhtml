@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+	<title>Partner Management | Earn</title>
+	
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+	<link rel="stylesheet" href="#{request.contextPath}/css/partnerList.css"/>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+	<div class="layout">
+		<!-- SIDEBAR - Same as admin dashboard -->
+		<ui:include src="/common/navbar.xhtml" />
+
+		<!-- MAIN CONTENT -->
+		<div class="main">
+			<h:form>
+				<!-- HEADER with Gradient -->
+				<div class="header">
+					<div class="header-content">
+						<div class="header-icon">🤝</div>
+						<div>
+							<h2>Partner Management</h2>
+							<p>Approve, block and manage platform partners</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- MESSAGES -->
+				<h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" 
+				           errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" />
+
+				<!-- SEARCH SECTION -->
+				<div class="searchBox">
+					<div class="search-header">
+						<span class="search-icon">🔍</span>
+						<h3>Search Partners</h3>
+					</div>
+					
+					<div class="search-controls">
+						<div class="search-input-wrapper">
+							<h:inputText value="#{adminController.searchText}" 
+							           required="false" 
+							           styleClass="search-input"
+							           placeholder="Search by name, email or phone..." />
+						</div>
+						
+						<div class="search-buttons">
+							<h:commandButton value="🔍 Search" styleClass="btn-search"
+								action="#{adminController.searchPartners}" />
+							<h:commandButton value="Show All" styleClass="btn-showall"
+								action="#{adminController.showAllPartners}" />
+						</div>
+					</div>
+
+					<!-- RADIO BUTTON -->
+					<div class="radioBox">
+						<span class="radio-label">Search Type:</span>
+						<h:selectOneRadio value="#{adminController.searchType}" styleClass="radio-group">
+							<f:selectItem itemValue="contains" itemLabel="Contains" />
+							<f:selectItem itemValue="starts" itemLabel="Starts With" />
+						</h:selectOneRadio>
+					</div>
+				</div>
+
+				<!-- TABLE SECTION -->
+				<div class="tableCard">
+					<div class="table-header">
+						<span class="table-icon">📋</span>
+						<h3>Partners List</h3>
+					</div>
+					
+					<div class="table-wrapper">
+						<h:dataTable value="#{adminController.partners}" var="p" styleClass="partner-table">
+
+							<!-- NAME -->
+							<h:column>
+								<f:facet name="header">
+									<div class="sort-container">
+										<span>Name</span>
+										<div class="sort-icons">
+											<h:commandLink value="▲"
+												action="#{adminController.sortBy('fullName')}"
+												styleClass="#{adminController.sortField eq 'fullName' and adminController.sortOrder eq 'ASC' ? 'active':''}" />
+											<h:commandLink value="▼"
+												action="#{adminController.sortBy('fullName')}"
+												styleClass="#{adminController.sortField eq 'fullName' and adminController.sortOrder eq 'DESC' ? 'active':''}" />
+										</div>
+									</div>
+								</f:facet>
+								<div class="cell-name">
+									<span class="name-icon">👤</span>
+									<span>#{p.fullName}</span>
+								</div>
+							</h:column>
+
+							<!-- EMAIL -->
+							<h:column>
+								<f:facet name="header">
+									<div class="sort-container">
+										<span>Email</span>
+										<div class="sort-icons">
+											<h:commandLink value="▲"
+												action="#{adminController.sortBy('email')}"
+												styleClass="#{adminController.sortField eq 'email' and adminController.sortOrder eq 'ASC' ? 'active':''}" />
+											<h:commandLink value="▼"
+												action="#{adminController.sortBy('email')}"
+												styleClass="#{adminController.sortField eq 'email' and adminController.sortOrder eq 'DESC' ? 'active':''}" />
+										</div>
+									</div>
+								</f:facet>
+								<div class="cell-email">
+									<span class="email-icon">📧</span>
+									<span>#{p.email}</span>
+								</div>
+							</h:column>
+
+							<!-- PHONE -->
+							<h:column>
+								<f:facet name="header">
+									<div class="sort-container">
+										<span>Phone</span>
+										<div class="sort-icons">
+											<h:commandLink value="▲"
+												action="#{adminController.sortBy('phone')}"
+												styleClass="#{adminController.sortField eq 'phone' and adminController.sortOrder eq 'ASC' ? 'active':''}" />
+											<h:commandLink value="▼"
+												action="#{adminController.sortBy('phone')}"
+												styleClass="#{adminController.sortField eq 'phone' and adminController.sortOrder eq 'DESC' ? 'active':''}" />
+										</div>
+									</div>
+								</f:facet>
+								<div class="cell-phone">
+									<span class="phone-icon">📱</span>
+									<span>#{p.phone}</span>
+								</div>
+							</h:column>
+
+							<!-- STATUS -->
+							<h:column>
+								<f:facet name="header">
+									<div class="sort-container">
+										<span>Status</span>
+										<div class="sort-icons">
+											<h:commandLink value="▲"
+												action="#{adminController.sortBy('status')}"
+												styleClass="#{adminController.sortField eq 'status' and adminController.sortOrder eq 'ASC' ? 'active':''}" />
+											<h:commandLink value="▼"
+												action="#{adminController.sortBy('status')}"
+												styleClass="#{adminController.sortField eq 'status' and adminController.sortOrder eq 'DESC' ? 'active':''}" />
+										</div>
+									</div>
+								</f:facet>
+								<h:panelGroup rendered="#{p.status eq 'ACTIVE'}">
+									<span class="badge-active">✓ ACTIVE</span>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{p.status eq 'PENDING'}">
+									<span class="badge-pending">⏳ PENDING</span>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{p.status eq 'BLOCKED'}">
+									<span class="badge-blocked">✗ BLOCKED</span>
+								</h:panelGroup>
+							</h:column>
+
+							<!-- ACTION -->
+							<h:column>
+								<f:facet name="header">Action</f:facet>
+								<div class="action-buttons">
+									<h:commandButton value="✓ Approve" styleClass="btn-approve"
+										action="#{adminController.approvePartner(p.id)}"
+										disabled="#{p.status eq 'ACTIVE'}" />
+									<h:commandButton value="✗ Block" styleClass="btn-block"
+										action="#{adminController.blockPartner(p.id)}"
+										disabled="#{p.status eq 'BLOCKED'}" />
+								</div>
+							</h:column>
+						</h:dataTable>
+					</div>
+				</div>
+
+				<!-- PAGINATION -->
+				<div class="paginationWrapper">
+					<div class="paginationLeft">
+						<h:commandButton value="← Previous"
+							styleClass="#{adminController.page == 0 ? 'pageBtnDisabled' : 'pageBtn'}"
+							action="#{adminController.previousPage}"
+							disabled="#{adminController.page == 0}" />
+
+						<h:commandButton value="Next →"
+							styleClass="#{adminController.page + 1 >= adminController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}"
+							action="#{adminController.nextPage}"
+							disabled="#{adminController.page + 1 >= adminController.totalPages}" />
+					</div>
+
+					<div class="paginationRight">
+						<span class="pageInfo">📄 Page #{adminController.page + 1} of #{adminController.totalPages}</span>
+						<span class="recordInfo">
+							📊 Showing #{adminController.page * adminController.pageSize + 1} -
+							#{(adminController.page * adminController.pageSize) + adminController.partners.size()} of
+							#{adminController.totalPartnerRecords} records
+						</span>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</div>
+
+	<!-- MOBILE MENU SCRIPT -->
+	   <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

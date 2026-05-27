@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+
+<title>Live Tasks</title>
+
+<link rel="stylesheet" href="#{request.contextPath}/css/userDashboard.css"/>
+</h:head>
+
+<h:body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <ui:include src="/common/userNavbar.xhtml"/>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- HEADER -->
+        <div class="header">
+            <h2>🔥 Live Tasks</h2>
+            <p>Complete tasks and earn rewards</p>
+        </div>
+
+        <!-- TASK GRID -->
+      <div class="cards">
+
+                <ui:repeat value="#{userTaskController.newTasks}" var="t">
+
+                    <div class="card">
+
+                        <div class="title">
+                            #{t.title}
+                        </div>
+
+                        <div class="desc">
+                            #{t.description}
+                        </div>
+
+                        <div class="reward">
+                            ₹#{t.reward}
+                        </div>
+
+                        <h:link outcome="/user/taskDetails.xhtml">
+                            <f:param name="taskId" value="#{t.id}" />
+                            <button class="btn">View Task</button>
+                        </h:link>
+
+                    </div>
+
+                </ui:repeat>
+
+            </div>
+
+    </div>
+
+</div>
+
+</h:body>
+
+</html>

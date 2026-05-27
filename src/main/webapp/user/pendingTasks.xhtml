@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+<title>Pending Submissions</title>
+<link rel="stylesheet" href="#{request.contextPath}/css/userDashboard.css"/>
+</h:head>
+
+<h:body>
+
+<div class="layout">
+
+<ui:include src="/common/userNavbar.xhtml"/>
+
+<div class="main">
+
+<div class="header">
+<h2>⏳ Pending Submissions</h2>
+<p>Waiting for admin approval</p>
+</div>
+
+<div class="cards">
+
+<ui:repeat value="#{userTaskController.pendingTasks}" var="p">
+
+<div class="card status-card pending">
+
+<div class="title">
+Task ID: #{p.taskId}
+</div>
+
+<div class="desc">
+Submitted on: #{p.submittedAt}
+</div>
+
+<div class="status-badge pending">
+PENDING
+</div>
+
+<h:link outcome="/user/submissionDetails">
+<f:param name="taskId" value="#{p.taskId}" />
+<button class="btn">View Details</button>
+</h:link>
+
+</div>
+
+</ui:repeat>
+
+</div>
+
+</div>
+</div>
+
+</h:body>
+</html>

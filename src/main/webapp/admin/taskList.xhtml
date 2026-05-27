@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Task Review | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/taskList.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR - Same as admin dashboard -->
+        <ui:include src="/common/navbar.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📋</div>
+                    <div>
+                        <h2>Pending Campaign Reviews</h2>
+                        <p>Review and approve pending campaigns before they go live</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">🎯</span>
+                    <h3>Campaigns Awaiting Review</h3>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:form>
+                        <h:dataTable value="#{adminController.draftTasks}" var="t" styleClass="task-table">
+                            
+                            <!-- TITLE -->
+                            <h:column>
+                                <f:facet name="header">Campaign Title</f:facet>
+                                <div class="cell-title">
+                                    <span class="title-icon">📢</span>
+                                    <span class="title-text">#{t.title}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- REWARD -->
+                            <h:column>
+                                <f:facet name="header">Reward</f:facet>
+                                <div class="cell-reward">
+                                    <span class="reward-icon">💰</span>
+                                    <span class="reward-amount">₹#{t.reward}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- COUNTRY -->
+                            <h:column>
+                                <f:facet name="header">Country</f:facet>
+                                <div class="cell-country">
+                                    <span class="country-icon">🌍</span>
+                                    <span>#{t.country}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- ACTION -->
+                            <h:column>
+                                <f:facet name="header">Action</f:facet>
+                                <div class="action-buttons">
+                                    <h:commandButton value="Review Campaign" styleClass="btn-review"
+                                        onclick="window.location='reviewTask.xhtml?taskId=#{t.id}'; return false;" />
+                                </div>
+                            </h:column>
+                            
+                        </h:dataTable>
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state" rendered="#{empty adminController.draftTasks}">
+                            <div class="empty-icon">✅</div>
+                            <h3>No Pending Reviews</h3>
+                            <p>All campaigns have been reviewed. Check back later for new submissions.</p>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+            
+            <!-- INFO SECTION -->
+            <div class="info">
+                <div class="info-header">
+                    <span class="info-icon">ℹ️</span>
+                    <h3>Review Guidelines</h3>
+                </div>
+                <p>Review each campaign carefully before approval. Ensure that the campaign follows platform guidelines, has appropriate rewards, and targets the correct audience. Approved campaigns will be immediately visible to users.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+    <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+
+</script>
+</h:body>
+</html>

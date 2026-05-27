@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>User Management | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/userList.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR - Same as admin dashboard -->
+        <ui:include src="/common/navbar.xhtml" />
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">👥</div>
+                    <div>
+                        <h2>User Management</h2>
+                        <p>Manage platform users, view details and control access</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH SECTION -->
+            <div class="searchBox">
+                <div class="search-header">
+                    <span class="search-icon">🔍</span>
+                    <h3>Search Users</h3>
+                </div>
+                
+                <h:form>
+                    <div class="search-controls">
+                        <div class="search-input-wrapper">
+                            <h:inputText value="#{adminController.userSearchText}" 
+                                       required="false" 
+                                       styleClass="search-input"
+                                       placeholder="Search by name, email or phone..." />
+                        </div>
+                        
+                        <div class="search-buttons">
+                            <h:commandButton value="🔍 Search" styleClass="btn-search"
+                                action="#{adminController.searchUsers}" />
+                            <h:commandButton value="Show All" styleClass="btn-showall"
+                                action="#{adminController.showAllUsers}" />
+                        </div>
+                    </div>
+
+                    <!-- RADIO BUTTON -->
+                    <div class="radioBox">
+                        <span class="radio-label">Search Type:</span>
+                        <h:selectOneRadio value="#{adminController.userSearchType}" styleClass="radio-group">
+                            <f:selectItem itemValue="contains" itemLabel="Contains" />
+                            <f:selectItem itemValue="starts" itemLabel="Starts With" />
+                        </h:selectOneRadio>
+                    </div>
+                </h:form>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages globalOnly="true" 
+                       infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">📋</span>
+                    <h3>Users List</h3>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:form>
+                        <h:dataTable value="#{adminController.users}" var="u" styleClass="user-table">
+
+                            <!-- ID -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>ID</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('id')}"
+                                                styleClass="#{adminController.userSortField eq 'id' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('id')}"
+                                                styleClass="#{adminController.userSortField eq 'id' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <span class="cell-id">#{u.id}</span>
+                            </h:column>
+
+                            <!-- NAME -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Name</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('fullName')}"
+                                                styleClass="#{adminController.userSortField eq 'fullName' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('fullName')}"
+                                                styleClass="#{adminController.userSortField eq 'fullName' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <span class="cell-name">#{u.fullName}</span>
+                            </h:column>
+
+                            <!-- EMAIL -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Email</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('email')}"
+                                                styleClass="#{adminController.userSortField eq 'email' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('email')}"
+                                                styleClass="#{adminController.userSortField eq 'email' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <span class="cell-email">#{u.email}</span>
+                            </h:column>
+
+                            <!-- PHONE -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Phone</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('phone')}"
+                                                styleClass="#{adminController.userSortField eq 'phone' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('phone')}"
+                                                styleClass="#{adminController.userSortField eq 'phone' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <span class="cell-phone">#{u.phone}</span>
+                            </h:column>
+
+                            <!-- COUNTRY -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Country</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('country')}"
+                                                styleClass="#{adminController.userSortField eq 'country' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('country')}"
+                                                styleClass="#{adminController.userSortField eq 'country' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <span class="cell-country">#{u.country}</span>
+                            </h:column>
+
+                            <!-- STATUS -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Status</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('status')}"
+                                                styleClass="#{adminController.userSortField eq 'status' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('status')}"
+                                                styleClass="#{adminController.userSortField eq 'status' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <h:panelGroup rendered="#{u.status eq 'ACTIVE'}">
+                                    <span class="badge-active">✓ ACTIVE</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{u.status eq 'PENDING'}">
+                                    <span class="badge-pending">⏳ PENDING</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{u.status eq 'BLOCKED'}">
+                                    <span class="badge-blocked">✗ BLOCKED</span>
+                                </h:panelGroup>
+                            </h:column>
+
+                            <!-- CREATED -->
+                            <h:column>
+                                <f:facet name="header">
+                                    <div class="sort-container">
+                                        <span>Created</span>
+                                        <div class="sort-icons">
+                                            <h:commandLink value="▲"
+                                                action="#{adminController.sortUsers('createdAt')}"
+                                                styleClass="#{adminController.userSortField eq 'createdAt' and adminController.userSortOrder eq 'ASC' ? 'active':''}" />
+                                            <h:commandLink value="▼"
+                                                action="#{adminController.sortUsers('createdAt')}"
+                                                styleClass="#{adminController.userSortField eq 'createdAt' and adminController.userSortOrder eq 'DESC' ? 'active':''}" />
+                                        </div>
+                                    </div>
+                                </f:facet>
+                                <span class="cell-date">
+                                    <h:outputText value="#{u.createdAt}">
+                                        <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                                    </h:outputText>
+                                </span>
+                            </h:column>
+
+                            <!-- ACTION -->
+                            <h:column>
+                                <f:facet name="header">Action</f:facet>
+                                <div class="action-buttons">
+                                    <h:commandButton value="✓ Unblock" styleClass="btn-unblock"
+                                        rendered="#{u.status eq 'BLOCKED'}"
+                                        action="#{adminController.unblockUser(u.id)}" />
+                                    <h:commandButton value="✗ Block" styleClass="btn-block"
+                                        rendered="#{u.status eq 'ACTIVE'}"
+                                        action="#{adminController.blockUser(u.id)}" />
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="paginationWrapper">
+                <div class="paginationLeft">
+                    <h:form>
+                        <h:commandButton value="← Previous"
+                            styleClass="#{adminController.userPage == 0 ? 'pageBtnDisabled' : 'pageBtn'}"
+                            action="#{adminController.previousUserPage}"
+                            disabled="#{adminController.userPage == 0}" />
+
+                        <h:commandButton value="Next →"
+                            styleClass="#{adminController.userPage + 1 >= adminController.totalUserPages ? 'pageBtnDisabled' : 'pageBtn'}"
+                            action="#{adminController.nextUserPage}"
+                            disabled="#{adminController.userPage + 1 >= adminController.totalUserPages}" />
+                    </h:form>
+                </div>
+
+                <div class="paginationRight">
+                    <span class="pageInfo">📄 Page #{adminController.userPage + 1} of #{adminController.totalUserPages}</span>
+                    <span class="recordInfo">
+                        📊 Showing #{adminController.userPage * adminController.userPageSize + 1} -
+                        #{(adminController.userPage * adminController.userPageSize) + adminController.users.size()} of
+                        #{adminController.totalUserRecords} records
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+    <script type="text/javascript">
+
+//<![CDATA[
+
+// ================= IMAGE MODAL =================
+
+function openModal(src) {
+
+    const modal =
+    document.getElementById('imageModal');
+
+    const modalImg =
+    document.getElementById('modalImage');
+
+    modal.style.display = 'flex';
+
+    modalImg.src = src;
+
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+
+    const modal =
+    document.getElementById('imageModal');
+
+    modal.style.display = 'none';
+
+    document.body.style.overflow = '';
+}
+
+// CLOSE MODAL ON ESCAPE
+
+document.addEventListener(
+'keydown',
+function(event) {
+
+    if(event.key === 'Escape') {
+
+        closeModal();
+    }
+});
+
+// ================= SIDEBAR =================
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE MOBILE MENU
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // RESET ON DESKTOP
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+
+</script>
+</h:body>
+</html>

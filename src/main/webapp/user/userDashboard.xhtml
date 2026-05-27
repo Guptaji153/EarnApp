@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+
+<title>User Dashboard</title>
+
+<link rel="stylesheet" href="#{request.contextPath}/css/userDashboard.css"/>
+</h:head>
+
+<h:body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+   <ui:include src="/common/userNavbar.xhtml"/>
+
+    <!-- MAIN CONTENT -->
+<div class="main">
+
+    <div class="header">
+        <h2>Available Tasks</h2>
+        <p>Complete tasks and earn rewards</p>
+    </div>
+
+    <!-- NEW SPLIT LAYOUT -->
+    <div class="dashboard-grid">
+
+        <!-- LEFT: TASKS -->
+   
+
+ <div class="dashboard-grid">
+
+    <!-- LEFT: EMPTY / SUMMARY -->
+    <div class="tasks-section">
+
+        <div class="card">
+
+            <h3>Welcome 👋</h3>
+
+            <p style="color:#666;">
+                Start earning by completing tasks.
+            </p>
+
+            <br/>
+
+            <h:link outcome="/user/liveTasks">
+                <button class="btn">Go to Live Tasks</button>
+            </h:link>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT: ANALYTICS -->
+    <div class="analytics-section">
+
+        <div class="card">
+            <h3>📊 Insights</h3>
+
+            <p style="color:#666;font-size:14px;">
+                Your activity, earnings and performance will appear here.
+            </p>
+
+            <div class="empty-box">
+                Coming Soon 🚀
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    </div>
+
+</div>
+
+</div>
+
+</h:body>
+</html>

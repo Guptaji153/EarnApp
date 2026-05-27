@@ -1,0 +1,46 @@
+<ui:composition
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<div class="sidebar">
+
+    <!-- PROFILE -->
+    <div class="profile">
+
+        <div class="avatar">
+            #{sessionScope.loggedUser.fullName.substring(0,1)}
+        </div>
+
+        <h:link outcome="/user/profile.xhtml" styleClass="profile-name">
+            #{sessionScope.loggedUser.fullName}
+        </h:link>
+
+    </div>
+
+    <!-- MENU -->
+    <div class="menu">
+
+      
+        
+        <h:link value="🏠 Dashboard" outcome="/user/userDashboard.xhtml" 
+        styleClass="#{view.viewId eq '/user/userDashboard.xhtml' ? 'active' : ''}"/>
+        
+         <h:link value="🔥 Live Tasks" outcome="/user/liveTasks.xhtml"/>
+          <h:link value="🔥 Pending Tasks" outcome="/user/pendingTasks.xhtml"/>
+           <h:link value="🔥 Rejected Tasks" outcome="/user/rejectedTasks.xhtml"/>
+			<h:link value="✅ Completed Tasks" outcome="/user/completedTasks.xhtml"/>
+      
+
+    </div>
+
+    <!-- LOGOUT -->
+    <h:form>
+        <h:commandButton value="Logout"
+            action="#{authController.logout}"
+            styleClass="logout"/>
+    </h:form>
+
+</div>
+
+</ui:composition>

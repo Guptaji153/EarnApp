@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+	<title>Partner Registration | Earn</title>
+
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet"
+		href="#{request.contextPath}/css/partnerRegister.css" />
+</h:head>
+
+<h:body>
+	<!-- ================= NAVBAR ================= -->
+	<nav class="top-navbar">
+		<div class="nav-container">
+			<!-- LOGO -->
+			<div class="nav-logo">
+				<a href="#{request.contextPath}/index.xhtml"> <span
+					class="logo-icon">💰</span> <span class="logo-text">Earn</span>
+				</a>
+			</div>
+
+			<!-- NAVIGATION -->
+			<div class="nav-menu" id="navMenu">
+				<ul class="nav-links">
+					<li><a href="#{request.contextPath}/index.xhtml"
+						class="nav-link">Home</a></li>
+					<li><a href="#{request.contextPath}/about.xhtml"
+						class="nav-link">About</a></li>
+					<li><a href="#{request.contextPath}/services.xhtml"
+						class="nav-link">Services</a></li>
+					<li><a href="#{request.contextPath}/userRegistration.xhtml"
+						class="nav-link">user Register</a></li>
+					<li><a href="#{request.contextPath}/partnerRegister.xhtml"
+						class="nav-link">Register as partner</a></li>
+					<li><a href="#{request.contextPath}/contact.xhtml"
+						class="nav-link">Contact</a></li>
+				</ul>
+			</div>
+
+			<!-- RIGHT ACTIONS -->
+			<div class="nav-actions">
+				<a href="#{request.contextPath}/login.xhtml" class="nav-btn-login">Sign
+					In</a> <a href="#{request.contextPath}/register.xhtml"
+					class="nav-btn-register active">Get Started</a>
+			</div>
+
+			<!-- MOBILE TOGGLE -->
+			<button class="mobile-menu-toggle" id="mobileMenuToggle"
+				aria-label="Toggle menu" type="button">
+				<span></span> <span></span> <span></span>
+			</button>
+		</div>
+	</nav>
+
+	<!-- REGISTRATION CONTAINER -->
+	<div class="register-container">
+		<div class="register-card">
+			<!-- Header Section -->
+			<div class="register-header">
+				<div class="logo-wrapper">
+					<span class="register-logo-icon">🤝</span> <span
+						class="register-logo-text">Partner Registration</span>
+				</div>
+				<h2>Join as a Partner</h2>
+				<p>Create your account and start earning today</p>
+			</div>
+
+			<!-- Messages -->
+			<h:messages globalOnly="true" layout="list"
+				infoStyle="color: #059669; background: #d1fae5; padding: 0.75rem; border-radius: 10px; margin-bottom: 1rem; display: block;"
+				errorStyle="color: #dc2626; background: #fee2e2; padding: 0.75rem; border-radius: 10px; margin-bottom: 1rem; display: block;" />
+
+			<!-- Registration Form -->
+			<h:form styleClass="register-form" id="registerForm" prependId="false">
+				<div class="input-group">
+					<div class="input-label-wrapper">
+						<span class="label-icon">📧</span>
+						<h:outputLabel value="Email Address *" for="email"
+							styleClass="input-label" />
+					</div>
+					<div class="input-icon-wrapper">
+						<span class="input-icon">📧</span>
+						<h:inputText id="email" value="#{userBean.email}" styleClass="input-field"
+							placeholder="Enter your email" />
+					</div>
+					<h:message for="email" styleClass="field-error" />
+				</div>
+
+				<div class="input-group">
+					<div class="input-label-wrapper">
+						<span class="label-icon">🔒</span>
+						<h:outputLabel value="Password *" for="password"
+							styleClass="input-label" />
+					</div>
+					<div class="input-icon-wrapper">
+						<span class="input-icon">🔒</span>
+						<h:inputSecret id="password" value="#{userBean.password}"
+							styleClass="input-field" placeholder="Create a password" />
+					</div>
+					<div class="password-hint">
+						<span class="hint-icon">ℹ️</span> <span>Minimum 6
+							characters recommended</span>
+					</div>
+					<h:message for="password" styleClass="field-error" />
+				</div>
+
+				<div class="input-group">
+					<div class="input-label-wrapper">
+						<span class="label-icon">👤</span>
+						<h:outputLabel value="Full Name" for="fullName"
+							styleClass="input-label" />
+					</div>
+					<div class="input-icon-wrapper">
+						<span class="input-icon">👤</span>
+						<h:inputText id="fullName" value="#{userBean.fullName}"
+							styleClass="input-field" placeholder="Enter your full name" />
+					</div>
+					<h:message for="fullName" styleClass="field-error" />
+				</div>
+
+				<div class="input-group">
+					<div class="input-label-wrapper">
+						<span class="label-icon">📱</span>
+						<h:outputLabel value="Phone Number" for="phone"
+							styleClass="input-label" />
+					</div>
+					<div class="input-icon-wrapper">
+						<span class="input-icon">📱</span>
+						<h:inputText id="phone" value="#{userBean.phone}" 
+							styleClass="input-field" placeholder="Enter your phone number" />
+					</div>
+					<h:message for="phone" styleClass="field-error" />
+				</div>
+
+				<h:selectOneMenu id="country" value="#{userBean.country}"
+					styleClass="input-field">
+
+					<f:selectItem itemLabel="Select Country" itemValue="" />
+
+					<f:selectItem itemLabel="India" itemValue="IN" />
+					<f:selectItem itemLabel="United States" itemValue="US" />
+					<f:selectItem itemLabel="United Kingdom" itemValue="UK" />
+					<f:selectItem itemLabel="Canada" itemValue="CA" />
+					<f:selectItem itemLabel="Australia" itemValue="AU" />
+
+				</h:selectOneMenu>
+
+				<h:message for="country" styleClass="field-error" />
+
+				<div class="info-message">
+					<span class="info-icon">ℹ️</span> <span>After registration,
+						your account will be <strong>pending admin approval</strong>. You
+						will receive an email once approved.
+					</span>
+				</div>
+
+				<h:commandButton value="Register as Partner"
+					action="#{userController.registerPartner}"
+					styleClass="register-btn" />
+			</h:form>
+
+			<!-- Login Link -->
+			<div class="login-link">
+				<p>
+					Already have an account? <a
+						href="#{request.contextPath}/login.xhtml">Sign in here</a>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- SCROLL BUTTON -->
+	<button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+	<script>
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileMenuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (mobileToggle &amp;&amp; navMenu) {
+            mobileToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                mobileToggle.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
+
+            // Close menu on link click
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        }
+
+        // Active link handling
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href &amp;&amp; currentPath.includes(href.replace('#{request.contextPath}', ''))) {
+                link.classList.add('active');
+            }
+        });
+
+        // Add floating animation to logo
+        const logo = document.querySelector('.register-logo-icon');
+        if (logo) {
+            setInterval(() => {
+                logo.style.transform = 'translateY(-3px)';
+                setTimeout(() => {
+                    logo.style.transform = 'translateY(0)';
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add input focus effects
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+
+        // Scroll to top button
+        const btn = document.getElementById("scrollTopBtn");
+        window.addEventListener("scroll", function() {
+            btn.style.display = window.scrollY > 300 ? "flex" : "none";
+        });
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+</h:body>
+</html>

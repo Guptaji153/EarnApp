@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Submission Review | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/submissionReview.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR - Same as admin dashboard -->
+        <ui:include src="/common/navbar.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📝</div>
+                    <div>
+                        <h2>Submission Review</h2>
+                        <p>Review and moderate user task submissions</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages globalOnly="true" 
+                       infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">📋</span>
+                    <h3>Pending Task Submissions</h3>
+                    <span class="pending-count" rendered="#{not empty adminSubmissionController.pendingSubmissions}">
+                        #{adminSubmissionController.pendingSubmissions.size()} Pending
+                    </span>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:form id="submissionForm">
+                        <h:dataTable value="#{adminSubmissionController.pendingSubmissions}" var="s" styleClass="submission-table">
+                            
+                            <!-- TASK ID - Hidden but used for row click -->
+                            <h:column style="display:none;">
+                                <h:outputText value="#{s.taskId}" id="taskId_#{s.id}"/>
+                            </h:column>
+                            
+                            <!-- Make entire row clickable with onclick -->
+                            <h:column>
+                                <f:facet name="header">Task ID</f:facet>
+                                <div class="cell-taskid" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
+                                    <span class="taskid-icon">🎯</span>
+                                    <span class="taskid-link">#{s.taskId}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- USER - Clickable -->
+                            <h:column>
+                                <f:facet name="header">User</f:facet>
+                                <div class="cell-user" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
+                                    <span class="user-icon">👤</span>
+                                    <span class="user-name">#{s.userName}</span>
+                                </div>
+                            </h:column>
+
+                            <!-- PROOF -->
+                            <h:column>
+                                <f:facet name="header">Proof</f:facet>
+                                <div class="cell-proof">
+                                    <h:panelGroup rendered="#{not empty s.proofPath}">
+                                        <h:outputLink value="#{request.contextPath}/image" target="_blank" styleClass="proof-link" onclick="event.stopPropagation();">
+                                            <f:param name="path" value="#{s.proofPath}" />
+                                            <span class="proof-icon">📎</span>
+                                            View Proof
+                                        </h:outputLink>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{empty s.proofPath}">
+                                        <span class="no-proof">No Proof Uploaded</span>
+                                    </h:panelGroup>
+                                </div>
+                            </h:column>
+
+                            <!-- DATE - Clickable -->
+                            <h:column>
+                                <f:facet name="header">Submitted</f:facet>
+                                <div class="cell-date" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
+                                    <span class="date-icon">📅</span>
+                                    <h:outputText value="#{s.submittedAt}">
+                                        <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                                    </h:outputText>
+                                </div>
+                            </h:column>
+
+                            <!-- REJECT REASON - Clickable -->
+                            <h:column>
+                                <f:facet name="header">Reject Reason</f:facet>
+                                <div class="cell-reason" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
+                                    <span class="reason-icon">💬</span>
+                                    <div class="reason-wrapper" onclick="event.stopPropagation();">
+                                        <h:inputText id="reason_#{s.id}" value="#{s.rejectionReason}" styleClass="reason-input" placeholder="Enter reason for rejection..."/>
+                                        <h:message for="reason_#{s.id}" styleClass="field-error"/>
+                                    </div>
+                                </div>
+                            </h:column>
+
+                            <!-- ACTIONS -->
+                            <h:column>
+                                <f:facet name="header">Action</f:facet>
+                                <div class="action-buttons" onclick="event.stopPropagation();">
+                                    <h:commandButton value="✓ Approve" styleClass="btn-approve" action="#{adminSubmissionController.approve(s.id)}"/>
+                                    <h:commandButton value="✗ Reject" styleClass="btn-reject" action="#{adminSubmissionController.reject(s.id, s.rejectionReason)}"/>
+                                </div>
+                            </h:column>
+                            
+                        </h:dataTable>
+                        
+                        <!-- Empty State -->
+                        <div class="empty-state" rendered="#{empty adminSubmissionController.pendingSubmissions}">
+                            <div class="empty-icon">✅</div>
+                            <h3>No Pending Submissions</h3>
+                            <p>All user submissions have been reviewed. Check back later for new submissions.</p>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+            
+            <!-- INFO SECTION -->
+            <div class="info">
+                <div class="info-header">
+                    <span class="info-icon">ℹ️</span>
+                    <h3>Review Guidelines</h3>
+                </div>
+                <p>Review each submission carefully. Approve valid submissions that meet task requirements. Reject submissions that don't meet criteria and provide a clear reason to help users understand what went wrong.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+      <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

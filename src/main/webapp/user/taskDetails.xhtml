@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+
+<title>Task Details</title>
+
+<link rel="stylesheet" href="#{request.contextPath}/css/userDashboard.css"/>
+
+</h:head>
+
+<h:body>
+
+<f:metadata>
+    <f:viewParam name="taskId" value="#{userTaskController.taskId}"/>
+    <f:event type="preRenderView" listener="#{userTaskController.loadTask}"/>
+</f:metadata>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <ui:include src="/common/navbar.xhtml"/>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- HEADER -->
+        <div class="header">
+            <h2>📋 Task Details</h2>
+            <p>Complete the task and submit your proof</p>
+        </div>
+
+        <!-- TASK DETAILS CARD -->
+        <div class="card">
+
+            <div class="title">
+                #{userTaskController.selectedTask.title}
+            </div>
+
+            <p>
+                #{userTaskController.selectedTask.description}
+            </p>
+
+            <div class="steps">
+                <b>Steps:</b>
+                <p>
+                    #{userTaskController.selectedTask.steps}
+                </p>
+            </div>
+
+            <!-- VISIT TASK -->
+            <h:form>
+                <h:commandLink
+                    value="Visit Task Link"
+                    action="#{userTaskController.markLinkVisited}"
+                    onclick="window.open('#{userTaskController.selectedTask.url}','_blank');return true;" />
+            </h:form>
+
+            <!-- UPLOAD PROOF -->
+            <h:form enctype="multipart/form-data">
+
+                <h:messages style="color:red"/>
+
+                <div class="upload-box">
+                    <h:inputFile
+                        value="#{userTaskController.proofFile}"
+                        accept="image/jpeg,image/png" />
+                </div>
+
+                <br/>
+				
+				Proof Description
+                <h:inputTextarea
+                    value="#{userTaskController.proofDescription}"
+                    placeholder="Describe your proof"
+                    rows="3"
+                    cols="40"/>
+
+                <br/><br/>
+
+                <h:commandButton
+                    value="Submit Proof"
+                    action="#{userTaskController.submitProof}"
+                    styleClass="btn" />
+
+            </h:form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</h:body>
+
+</html>

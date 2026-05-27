@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view>
+
+<f:metadata>
+    <f:event type="preRenderView" listener="#{authController.checkAlreadyLoggedIn}" />
+    <f:event type="preRenderView" listener="#{authController.preventBack}" />
+</f:metadata>
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Login | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/logins.css"/>
+</h:head>
+
+<h:body>
+    <!-- ================= NAVBAR ================= -->
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <!-- LOGO -->
+            <div class="nav-logo">
+                <a href="#{request.contextPath}/index.xhtml">
+                    <span class="logo-icon">💰</span>
+                    <span class="logo-text">Earn</span>
+                </a>
+            </div>
+
+            <!-- NAVIGATION -->
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="#{request.contextPath}/index.xhtml" class="nav-link">Home</a></li>
+                    <li><a href="#{request.contextPath}/about.xhtml" class="nav-link">About</a></li>
+                    <li><a href="#{request.contextPath}/services.xhtml" class="nav-link">Services</a></li>
+                    <li><a href="#{request.contextPath}/userRegistration.xhtml" class="nav-link">user Register</a></li>
+                    <li><a href="#{request.contextPath}/partnerRegister.xhtml" class="nav-link">Register as partner</a></li>
+                    <li><a href="#{request.contextPath}/partnerRegister.xhtml" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- RIGHT ACTIONS -->
+            <div class="nav-actions">
+                <a href="#{request.contextPath}/login.xhtml" class="nav-btn-login active">Sign In</a>
+                <a href="#{request.contextPath}/register.xhtml" class="nav-btn-register">Get Started</a>
+            </div>
+
+            <!-- MOBILE TOGGLE -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu" type="button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- LOGIN CONTAINER -->
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo Section -->
+            <div class="login-header">
+                <div class="logo-wrapper">
+                    <span class="login-logo-icon">💰</span>
+                    <span class="login-logo-text">Earn</span>
+                </div>
+                <h2>Welcome back</h2>
+                <p>Sign in to your account to continue</p>
+            </div>
+
+            <!-- Login Form -->
+            <h:form styleClass="login-form" id="loginForm">
+                <div class="message-container">
+                    <h:messages errorStyle="color: #dc2626; font-size: 0.875rem; background: #fee2e2; padding: 0.75rem; border-radius: 10px; margin-bottom: 1rem; display: block;" 
+                               infoStyle="color: #059669; font-size: 0.875rem; background: #d1fae5; padding: 0.75rem; border-radius: 10px; margin-bottom: 1rem; display: block;"
+                               layout="list"/>
+                </div>
+
+                <div class="input-group">
+                    <h:outputLabel value="Email Address" styleClass="input-label"/>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">📧</span>
+                        <h:inputText value="#{authController.email}" 
+                                   required="true"
+                                   styleClass="input-field"
+                                   placeholder="Enter your email"/>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-wrapper">
+                        <h:outputLabel value="Password" styleClass="input-label"/>
+                        <a href="#{request.contextPath}/forgotPassword.xhtml" class="forgot-link">Forgot password?</a>
+                    </div>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <h:inputSecret value="#{authController.password}" 
+                                     required="true"
+                                     styleClass="input-field"
+                                     placeholder="Enter your password"/>
+                    </div>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMe"/>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">Remember me</span>
+                    </label>
+                </div>
+
+                <h:commandButton value="Sign In" 
+                               action="#{authController.login}"
+                               styleClass="login-btn"/>
+            </h:form>
+
+            <!-- Sign Up Link -->
+            <div class="signup-link">
+                <p>Don't have an account? <a href="#{request.contextPath}/register.xhtml">Create account</a></p>
+            </div>
+
+            <!-- Social Login Options -->
+            <div class="social-login">
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+                <div class="social-buttons">
+                    <button type="button" class="social-btn google" onclick="alert('Google login coming soon')">
+                        <span>G</span> Google
+                    </button>
+                    <button type="button" class="social-btn github" onclick="alert('GitHub login coming soon')">
+                        <span>⎇</span> GitHub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCROLL BUTTON -->
+    <button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileMenuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (mobileToggle &amp;&amp; navMenu) {
+            mobileToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                mobileToggle.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
+
+            // Close menu on link click
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        }
+
+        // Active link handling
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href &amp;&amp; currentPath.includes(href.replace('#{request.contextPath}', ''))) {
+                link.classList.add('active');
+            }
+        });
+
+        // Add floating animation to logo
+        const logo = document.querySelector('.login-logo-icon');
+        if (logo) {
+            setInterval(() => {
+                logo.style.transform = 'translateY(-3px)';
+                setTimeout(() => {
+                    logo.style.transform = 'translateY(0)';
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add input focus effects
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+
+        // Scroll to top button
+        const btn = document.getElementById("scrollTopBtn");
+        window.addEventListener("scroll", function() {
+            btn.style.display = window.scrollY > 300 ? "flex" : "none";
+        });
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+</h:body>
+
+</f:view>
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+	<class name="Task" table="tasks">
+
+		<!-- Primary Key -->
+		<id name="id" column="id" type="long">
+			<generator class="identity" />
+		</id>
+
+		<!-- Task details -->
+		<property name="title" column="title" type="string"
+			not-null="true" />
+
+		<property name="description" column="description" type="text" />
+
+		<property name="steps" column="steps" type="text" />
+
+		<!-- IMPORTANT FIX -->
+		<property name="reward" column="reward" type="double" />
+
+		<property name="country" column="country" type="string" />
+
+		<!-- Flat foreign keys -->
+		<property name="partnerId" column="partner_id" type="long"
+			not-null="true" />
+
+		<property name="createdBy" column="created_by" type="long"
+			not-null="true" />
+
+		<property name="status" column="status" type="string" />
+
+		<property name="createdAt" column="created_at"
+			type="timestamp" />
+			
+			<property name="submissionLimit" column="submission_limit"/>
+
+		<!-- Admin approval -->
+		<property name="approvedBy" column="approved_by" type="long" />
+
+		 <property name="url" column="url" type="string"/>
+		<property name="approvedAt" column="approved_at"
+			type="timestamp" />
+
+<property name="rejectionReason"
+          column="rejection_reason"
+          type="string"/>
+	</class>
+
+</hibernate-mapping>

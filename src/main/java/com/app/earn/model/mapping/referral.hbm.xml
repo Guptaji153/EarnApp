@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+    <class name="Referral" table="referrals">
+
+        <!-- Primary Key -->
+        <id name="id" column="id" type="long">
+            <generator class="identity"/>
+        </id>
+
+        <!-- Flat foreign keys (NO relations) -->
+        <property name="referrerId" column="referrer_id" type="long" not-null="true"/>
+        <property name="referredUserId" column="referred_user_id" type="long" not-null="true"/>
+
+        <property name="status" column="status" type="string"/>
+
+        <property name="createdAt" column="created_at" type="timestamp"/>
+
+    </class>
+
+</hibernate-mapping>

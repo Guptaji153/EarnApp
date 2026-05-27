@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+                http://java.sun.com/xml/ns/javaee
+                http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+
+	<!-- ========================= -->
+	<!-- USER FORM BEAN -->
+	<!-- ========================= -->
+	<managed-bean>
+		<managed-bean-name>userBean</managed-bean-name>
+		<managed-bean-class>com.app.earn.pojo.User</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+	</managed-bean>
+
+
+	<!-- ========================= -->
+	<!-- DAO LAYER -->
+	<!-- ========================= -->
+
+	<managed-bean>
+		<managed-bean-name>userDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.UserDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>userOtpDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.UserOtpDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>taskDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.TaskDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>taskStatsDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.TaskStatsDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>taskSubmissionDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.TaskSubmissionDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>adminDashboardDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.AdminDashboardDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>userTaskDao</managed-bean-name>
+		<managed-bean-class>com.app.earn.daoimpl.UserTaskDaoImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<!-- ========================= -->
+	<!-- SERVICE LAYER -->
+	<!-- ========================= -->
+
+	<managed-bean>
+		<managed-bean-name>userService</managed-bean-name>
+		<managed-bean-class>com.app.earn.serviceimpl.UserServiceImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<!-- Inject DAO into Service -->
+		<managed-property>
+			<property-name>userDao</property-name>
+			<value>#{userDao}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>userOtpDao</property-name>
+			<value>#{userOtpDao}</value>
+		</managed-property>
+
+
+
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>taskService</managed-bean-name>
+		<managed-bean-class>com.app.earn.serviceimpl.TaskServiceImpl</managed-bean-class>
+
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<managed-property>
+			<property-name>taskDao</property-name>
+			<value>#{taskDao}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>taskStatsService</managed-bean-name>
+		<managed-bean-class>com.app.earn.serviceimpl.TaskStatsServiceImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<managed-property>
+			<property-name>taskStatsDao</property-name>
+			<value>#{taskStatsDao}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>taskSubmissionService</managed-bean-name>
+		<managed-bean-class>com.app.earn.serviceimpl.TaskSubmissionServiceImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<managed-property>
+			<property-name>taskSubmissionDao</property-name>
+			<value>#{taskSubmissionDao}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<!-- user service -->
+	<managed-bean>
+		<managed-bean-name>userTaskService</managed-bean-name>
+		<managed-bean-class>com.app.earn.serviceimpl.UserTaskServiceImpl</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<managed-property>
+			<property-name>userTaskDao</property-name>
+			<value>#{userTaskDao}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<!-- admin service -->
+
+	<managed-bean>
+		<managed-bean-name>adminDashboardSearvice</managed-bean-name>
+		<managed-bean-class>com.app.earn.serviceimpl.AdminDashboardSearviceImpl</managed-bean-class>
+
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<managed-property>
+			<property-name>adminDashboardDao</property-name>
+			<value>#{adminDashboardDao}</value>
+		</managed-property>
+
+	</managed-bean>
+	<!-- ========================= -->
+	<!-- CONTROLLER -->
+	<!-- ========================= -->
+
+	<managed-bean>
+		<managed-bean-name>userController</managed-bean-name>
+		<managed-bean-class>com.app.earn.controller.UserController</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<!-- Inject User Bean -->
+		<managed-property>
+			<property-name>user</property-name>
+			<value>#{userBean}</value>
+		</managed-property>
+
+		<!-- Inject Service (NOT DAO anymore) -->
+		<managed-property>
+			<property-name>userService</property-name>
+			<value>#{userService}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<managed-bean>
+
+		<managed-bean-name>authController</managed-bean-name>
+
+		<managed-bean-class>com.app.earn.controller.AuthController</managed-bean-class>
+
+		<managed-bean-scope>session</managed-bean-scope>
+
+		<managed-property>
+			<property-name>userService</property-name>
+			<value>#{userService}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<managed-bean>
+
+		<managed-bean-name>adminController</managed-bean-name>
+
+		<managed-bean-class>com.app.earn.controller.AdminController</managed-bean-class>
+
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<managed-property>
+			<property-name>adminDashboardSearvice</property-name>
+			<value>#{adminDashboardSearvice}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>taskService</property-name>
+			<value>#{taskService}</value>
+		</managed-property>
+
+
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>adminSubmissionController</managed-bean-name>
+		<managed-bean-class>com.app.earn.controller.AdminSubmissionController</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<managed-property>
+			<property-name>taskSubmissionService</property-name>
+			<value>#{taskSubmissionService}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+
+		<managed-bean-name>taskController</managed-bean-name>
+
+		<managed-bean-class>com.app.earn.controller.TaskController</managed-bean-class>
+
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<managed-property>
+			<property-name>taskService</property-name>
+			<value>#{taskService}</value>
+		</managed-property>
+
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>campaignPerformanceController</managed-bean-name>
+		<managed-bean-class>com.app.earn.controller.CampaignPerformanceController</managed-bean-class>
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<managed-property>
+			<property-name>taskStatsService</property-name>
+			<value>#{taskStatsService}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>taskSubmissionService</property-name>
+			<value>#{taskSubmissionService}</value>
+		</managed-property>
+
+	</managed-bean>
+	
+		<managed-bean>
+
+		<managed-bean-name>adminCampaignController</managed-bean-name>
+
+		<managed-bean-class>com.app.earn.controller.AdminCampaignController</managed-bean-class>
+
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<managed-property>
+			<property-name>adminDashboardSearvice</property-name>
+
+			<value>
+				#{adminDashboardSearvice}
+			</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<managed-bean>
+
+		<managed-bean-name>userTaskController</managed-bean-name>
+
+		<managed-bean-class>com.app.earn.controller.UserTaskController</managed-bean-class>
+
+		<managed-bean-scope>view</managed-bean-scope>
+
+		<managed-property>
+			<property-name>userTaskService</property-name>
+			<value>#{userTaskService}</value>
+		</managed-property>
+
+	</managed-bean>
+
+
+</faces-config>

@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<div class="sidebar">
+
+		<div class="profile">
+
+			<!-- 
+<div class="avatar">
+#{sessionScope.loggedUser.fullName.substring(0,1)}
+</div>   -->
+
+			<h:link outcome="/profile.xhtml" styleClass="profile-link">
+
+				<div class="avatar">
+					#{sessionScope.loggedUser.fullName.substring(0,1)}</div>
+
+			</h:link>
+
+			<h:link outcome="/profile.xhtml" styleClass="profile-name">
+#{sessionScope.loggedUser.fullName}
+</h:link>
+
+		</div>
+
+		<div class="notification">
+
+			<h:link outcome="/admin/submissionReview.xhtml">
+
+🔔
+
+<span class="badge">
+
+					#{adminSubmissionController.notificationCount} </span>
+
+			</h:link>
+
+		</div>
+
+		<div class="menu">
+
+			<h:link value="Dashboard" outcome="/admin/adminDashboard.xhtml" />
+
+			<h:link value="Partners" outcome="/admin/partnerList.xhtml" />
+
+			<h:link value="Users" outcome="/admin/userList.xhtml" />
+
+			<h:link value="Users" outcome="/admin/campaignManagement.xhtml" />
+
+			<h:link value="Tasks" outcome="/admin/taskList.xhtml" />
+			<h:link value="Submissions" outcome="/admin/submissionReview.xhtml" />
+			<h:link value="Submission History"
+				outcome="/admin/submissionHistory.xhtml" />
+
+		</div>
+
+		<h:form>
+			<h:commandButton value="Logout" action="#{authController.logout}"
+				styleClass="logout" />
+		</h:form>
+
+	</div>
+
+</ui:composition>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:metadata>
+    <f:viewParam name="taskId" value="#{taskController.taskId}" />
+    <f:viewAction action="#{taskController.loadTask}" />
+</f:metadata>
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Edit Campaign | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/editCampaign.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <ui:include src="/common/partnerNav.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">✏️</div>
+                    <div>
+                        <h2>Edit Campaign</h2>
+                        <p>View and manage your campaign details</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- CAMPAIGN EDIT CARD -->
+            <div class="edit-card">
+                <!-- Status Section -->
+                <div class="status-section">
+                    <div class="status-label">
+                        <span class="status-icon">⚡</span>
+                        <span>Current Status</span>
+                    </div>
+                    <div class="status-value">
+                        <span class="status-badge status-#{taskController.selectedTask.status}">
+                            #{taskController.selectedTask.status}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Rejection Reason (if rejected) -->
+                <div class="rejection-section" rendered="#{taskController.selectedTask.status eq 'REJECTED'}">
+                    <div class="rejection-header">
+                        <span class="rejection-icon">⚠️</span>
+                        <span>Rejection Reason</span>
+                    </div>
+                    <div class="rejection-content">
+                        #{taskController.selectedTask.rejectionReason}
+                    </div>
+                </div>
+
+                <!-- Edit Form -->
+                <h:form>
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">📌</span>
+                            Campaign Title
+                        </label>
+                        <h:inputText value="#{taskController.selectedTask.title}" 
+                                   styleClass="form-input"
+                                   readonly="#{taskController.selectedTask.status ne 'DRAFT' and taskController.selectedTask.status ne 'REJECTED'}" 
+                                   placeholder="Enter campaign title"/>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">📄</span>
+                            Description
+                        </label>
+                        <h:inputTextarea value="#{taskController.selectedTask.description}" 
+                                        styleClass="form-textarea" 
+                                        rows="4"
+                                        readonly="#{taskController.selectedTask.status ne 'DRAFT' and taskController.selectedTask.status ne 'REJECTED'}"
+                                        placeholder="Describe what users need to do"/>
+                    </div>
+
+                    <!-- Steps -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">📝</span>
+                            Steps to Complete
+                        </label>
+                        <h:inputTextarea value="#{taskController.selectedTask.steps}" 
+                                        styleClass="form-textarea" 
+                                        rows="4"
+                                        readonly="#{taskController.selectedTask.status ne 'DRAFT' and taskController.selectedTask.status ne 'REJECTED'}"
+                                        placeholder="List the steps to complete this task"/>
+                    </div>
+
+                    <!-- URL -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">🔗</span>
+                            Campaign URL
+                        </label>
+                        <h:inputText value="#{taskController.selectedTask.url}" 
+                                   styleClass="form-input"
+                                   readonly="#{taskController.selectedTask.status ne 'DRAFT' and taskController.selectedTask.status ne 'REJECTED'}"
+                                   placeholder="https://example.com/campaign"/>
+                    </div>
+
+                    <!-- Country -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">🌍</span>
+                            Target Country
+                        </label>
+                        <h:inputText value="#{taskController.selectedTask.country}" 
+                                   styleClass="form-input"
+                                   readonly="#{taskController.selectedTask.status ne 'DRAFT' and taskController.selectedTask.status ne 'REJECTED'}"
+                                   placeholder="e.g., India, USA, UK"/>
+                    </div>
+
+                    <!-- Reward -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">💰</span>
+                            Reward Amount (₹)
+                        </label>
+                        <h:inputText value="#{taskController.selectedTask.reward}" 
+                                   styleClass="form-input"
+                                   readonly="#{taskController.selectedTask.status ne 'DRAFT' and taskController.selectedTask.status ne 'REJECTED'}"
+                                   placeholder="Enter reward amount"/>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-actions">
+                        <h:commandButton value="✓ Update Campaign" 
+                                       styleClass="btn-update"
+                                       action="#{taskController.updateTask}"
+                                       rendered="#{taskController.selectedTask.status eq 'DRAFT' or taskController.selectedTask.status eq 'REJECTED'}"/>
+                        
+                        <h:link value="← Back to My Campaigns" 
+                               outcome="/partner/myCampaigns.xhtml" 
+                               styleClass="btn-back"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+       <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

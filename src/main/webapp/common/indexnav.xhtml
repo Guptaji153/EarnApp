@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:outputStylesheet library="css" name="indexNav.css"/>
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="top-navbar">
+
+        <div class="nav-container">
+
+            <!-- LOGO -->
+            <div class="nav-logo">
+
+                <a href="#{request.contextPath}/index.xhtml">
+
+                    <span class="logo-icon">💰</span>
+
+                    <span class="logo-text">Earn</span>
+
+                </a>
+
+            </div>
+
+            <!-- NAVIGATION -->
+            <div class="nav-menu" id="navMenu">
+
+                <ul class="nav-links">
+
+                    <li>
+                        <a href="#{request.contextPath}/index.xhtml"
+                           class="nav-link active">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#{request.contextPath}/about.xhtml"
+                           class="nav-link">
+                            About
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#{request.contextPath}/services.xhtml"
+                           class="nav-link">
+                            Services
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#{request.contextPath}/userRegistration.xhtml"
+                           class="nav-link">
+                           User Register
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#{request.contextPath}/partnerRegister.xhtml"
+                           class="nav-link">
+                             Register as partner
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#{request.contextPath}/contact.xhtml"
+                           class="nav-link">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <!-- RIGHT ACTIONS -->
+            <div class="nav-actions">
+
+                <a href="#{request.contextPath}/login.xhtml"
+                   class="nav-btn-login">
+                    Sign In
+                </a>
+
+                <a href="#{request.contextPath}/userRegistration.xhtml"
+                   class="nav-btn-register">
+                    Get Started
+                </a>
+
+            </div>
+
+            <!-- MOBILE TOGGLE -->
+            <button class="mobile-menu-toggle"
+                    id="mobileMenuToggle"
+                    aria-label="Toggle menu"
+                    type="button">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+        </div>
+
+    </nav>
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script type="text/javascript">
+
+        const mobileToggle =
+            document.getElementById('mobileMenuToggle');
+
+        const navMenu =
+            document.getElementById('navMenu');
+
+        if (mobileToggle &amp;&amp; navMenu) {
+
+            mobileToggle.addEventListener('click', function () {
+
+                navMenu.classList.toggle('active');
+
+                mobileToggle.classList.toggle('active');
+
+                document.body.classList.toggle('menu-open');
+
+            });
+
+            // CLOSE MENU ON LINK CLICK
+            const navLinks =
+                document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+
+                link.addEventListener('click', () => {
+
+                    navMenu.classList.remove('active');
+
+                    mobileToggle.classList.remove('active');
+
+                    document.body.classList.remove('menu-open');
+
+                });
+
+            });
+
+        }
+
+        // ACTIVE LINK HANDLING
+        const currentPath = window.location.pathname;
+
+        const links =
+            document.querySelectorAll('.nav-link');
+
+        links.forEach(link => {
+
+            const href = link.getAttribute('href');
+
+            if (href &amp;&amp;
+                currentPath.includes(
+                    href.replace('#{request.contextPath}', '')
+                )) {
+
+                link.classList.add('active');
+
+            }
+
+        });
+
+    </script>
+
+</ui:composition>

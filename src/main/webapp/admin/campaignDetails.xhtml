@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:metadata>
+    <f:viewParam name="taskId" value="#{adminCampaignController.taskId}" />
+    <f:viewAction action="#{adminCampaignController.loadCampaignDetails}" />
+</f:metadata>
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Campaign Details | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/campaignDetails.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <ui:include src="/common/navbar.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📢</div>
+                    <div>
+                        <h2>Campaign Details</h2>
+                        <p>View and manage campaign information</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages globalOnly="true" 
+                       infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- CAMPAIGN INFO CARD -->
+            <div class="info-card">
+                <div class="card-header">
+                    <span class="card-icon">📋</span>
+                    <h3>Campaign Information</h3>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label">Campaign Title</div>
+                        <div class="info-value">#{adminCampaignController.selectedCampaign.taskTitle}</div>
+                    </div>
+                    
+                    <div class="info-row full-width">
+                        <div class="info-label">Description</div>
+                        <div class="info-value description">#{adminCampaignController.selectedCampaign.description}</div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <div class="info-label">Partner</div>
+                        <div class="info-value">#{adminCampaignController.selectedCampaign.partnerName}</div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">
+                            <span class="status-badge status-#{adminCampaignController.selectedCampaign.status}">
+                                #{adminCampaignController.selectedCampaign.status}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <div class="info-label">Reward</div>
+                        <div class="info-value reward">₹#{adminCampaignController.selectedCampaign.reward}</div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <div class="info-label">Submission Limit</div>
+                        <div class="info-value">#{adminCampaignController.selectedCampaign.submissionLimit}</div>
+                    </div>
+                    
+                    <div class="info-row">
+                        <div class="info-label">Slots Left</div>
+                        <div class="info-value slots">#{adminCampaignController.selectedCampaign.slotsLeft}</div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-section">
+                    <div class="progress-label">Completion Progress</div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar" style="width:#{((adminCampaignController.selectedCampaign.accepted + adminCampaignController.selectedCampaign.pending) / adminCampaignController.selectedCampaign.submissionLimit) * 100}%;">
+                        </div>
+                    </div>
+                    <div class="progress-stats">
+                        <span>📊 #{((adminCampaignController.selectedCampaign.accepted + adminCampaignController.selectedCampaign.pending) / adminCampaignController.selectedCampaign.submissionLimit) * 100}% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATS CARDS -->
+            <div class="stats-container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">#{adminCampaignController.selectedCampaign.totalSubmissions}</div>
+                        <div class="stat-label">Total Submissions</div>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-value">#{adminCampaignController.selectedCampaign.accepted}</div>
+                        <div class="stat-label">Accepted</div>
+                    </div>
+                    
+                    <div class="stat-card warning">
+                        <div class="stat-value">#{adminCampaignController.selectedCampaign.pending}</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    
+                    <div class="stat-card danger">
+                        <div class="stat-value">#{adminCampaignController.selectedCampaign.rejected}</div>
+                        <div class="stat-label">Rejected</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAMPAIGN CONTROLS CARD -->
+            <div class="controls-card">
+                <div class="card-header">
+                    <span class="card-icon">⚙️</span>
+                    <h3>Campaign Controls</h3>
+                </div>
+                
+                <div class="controls-body">
+                    <h:form>
+                        <div class="control-group">
+                            <div class="control-label">Adjust Submission Limit</div>
+                            <div class="control-input-group">
+                                <h:inputText value="#{adminCampaignController.limitChange}" styleClass="limit-input" placeholder="Enter amount"/>
+                                <h:commandButton value="+ Increase" action="#{adminCampaignController.increaseLimit}" styleClass="btn-increase"/>
+                                <h:commandButton value="- Decrease" action="#{adminCampaignController.decreaseLimit}" styleClass="btn-decrease"/>
+                            </div>
+                        </div>
+                        
+                        <div class="control-divider"></div>
+                        
+                        <div class="control-group">
+                            <div class="control-label">Campaign Status</div>
+                            <div class="control-buttons">
+                                <h:commandButton value="Close Campaign" action="#{adminCampaignController.closeCampaign}" styleClass="btn-close" rendered="#{adminCampaignController.selectedCampaign.status != 'CLOSED'}"/>
+                                <h:commandButton value="Reopen Campaign" action="#{adminCampaignController.reopenCampaign}" styleClass="btn-reopen" rendered="#{adminCampaignController.selectedCampaign.status == 'CLOSED'}"/>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+            
+            <!-- BACK BUTTON -->
+            <div class="back-section">
+                <h:link outcome="/admin/taskList.xhtml" styleClass="btn-back">
+                    ← Back to Campaigns
+                </h:link>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+       <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

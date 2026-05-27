@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+    <title>Campaign Analytics | Earn</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="#{request.contextPath}/css/campaignAnalytics.css"/>
+</h:head>
+
+<h:body>
+<button class="menu-toggle"
+        id="menuToggle">
+    ☰
+</button>
+
+<div class="overlay"
+     id="overlay"></div>
+    <f:metadata>
+        <f:viewParam name="taskId" value="#{campaignPerformanceController.taskId}" />
+        <f:viewAction action="#{campaignPerformanceController.loadSubmissions}" />
+    </f:metadata>
+
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <ui:include src="/common/partnerNav.xhtml"/>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER with Gradient -->
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">📊</div>
+                    <div>
+                        <h2>Campaign Analytics</h2>
+                        <p>View and analyze submission details</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGES -->
+            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+
+            <!-- TABLE SECTION -->
+            <div class="tableCard">
+                <div class="table-header">
+                    <span class="table-icon">📋</span>
+                    <h3>Campaign Submissions</h3>
+                    <span class="record-badge" rendered="#{not empty campaignPerformanceController.submissions}">
+                        #{campaignPerformanceController.submissions.size()} Submissions
+                    </span>
+                </div>
+                
+                <div class="table-wrapper">
+                    <h:dataTable value="#{campaignPerformanceController.submissions}" var="s" styleClass="analytics-table" rendered="#{not empty campaignPerformanceController.submissions}">
+                        
+                        <!-- USER -->
+                        <h:column>
+                            <f:facet name="header">
+                                <div class="sort-header">
+                                    <span class="header-icon">👤</span>
+                                    <span>User</span>
+                                </div>
+                            </f:facet>
+                            <div class="cell-user">
+                                <span class="user-name">#{s.userName}</span>
+                            </div>
+                        </h:column>
+
+                        <!-- PROOF -->
+                        <h:column>
+                            <f:facet name="header">
+                                <div class="sort-header">
+                                    <span class="header-icon">📎</span>
+                                    <span>Proof</span>
+                                </div>
+                            </f:facet>
+                            <div class="cell-proof">
+                                <h:panelGroup rendered="#{not empty s.proofPath}">
+                                    <div class="proof-wrapper" onclick="openModal('#{request.contextPath}/image?path=#{s.proofPath}')">
+                                        <img src="#{request.contextPath}/image?path=#{s.proofPath}" alt="Proof" class="proof-thumbnail"/>
+                                        <div class="proof-overlay">
+                                            <span class="zoom-icon">🔍</span>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty s.proofPath}">
+                                    <span class="no-proof">No Proof</span>
+                                </h:panelGroup>
+                            </div>
+                        </h:column>
+
+                        <!-- STATUS -->
+                        <h:column>
+                            <f:facet name="header">
+                                <div class="sort-header">
+                                    <span class="header-icon">⚡</span>
+                                    <span>Status</span>
+                                </div>
+                            </f:facet>
+                            <div class="cell-status">
+                                <span class="status-badge status-#{s.status}">#{s.status}</span>
+                            </div>
+                        </h:column>
+
+                        <!-- SUBMITTED DATE -->
+                        <h:column>
+                            <f:facet name="header">
+                                <div class="sort-header">
+                                    <span class="header-icon">📅</span>
+                                    <span>Submitted</span>
+                                </div>
+                            </f:facet>
+                            <div class="cell-date">
+                                <span class="date-text">
+                                    <h:outputText value="#{s.submittedAt}">
+                                        <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
+                                    </h:outputText>
+                                </span>
+                            </div>
+                        </h:column>
+
+                        <!-- VERIFIED BY -->
+                        <h:column>
+                            <f:facet name="header">
+                                <div class="sort-header">
+                                    <span class="header-icon">✓</span>
+                                    <span>Verified By</span>
+                                </div>
+                            </f:facet>
+                            <div class="cell-verified">
+                                <h:panelGroup rendered="#{not empty s.adminName}">
+                                    <span class="verified-name">#{s.adminName}</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty s.adminName}">
+                                    <span class="not-verified">—</span>
+                                </h:panelGroup>
+                            </div>
+                        </h:column>
+
+                        <!-- REJECT REASON -->
+                        <h:column>
+                            <f:facet name="header">
+                                <div class="sort-header">
+                                    <span class="header-icon">💬</span>
+                                    <span>Reject Reason</span>
+                                </div>
+                            </f:facet>
+                            <div class="cell-reason">
+                                <h:panelGroup rendered="#{s.status eq 'REJECTED'}">
+                                    <span class="reject-reason">#{s.rejectionReason}</span>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{s.status ne 'REJECTED'}">
+                                    <span class="no-reason">—</span>
+                                </h:panelGroup>
+                            </div>
+                        </h:column>
+                        
+                    </h:dataTable>
+                    
+                    <!-- Empty State -->
+                    <div class="empty-state" rendered="#{empty campaignPerformanceController.submissions}">
+                        <div class="empty-icon">📭</div>
+                        <h3>No Submissions Found</h3>
+                        <p>No submissions have been made for this campaign yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BACK BUTTON -->
+            <div class="back-section">
+                <h:link value="← Back to Campaign Performance" outcome="/partner/campaignPerformance.xhtml" styleClass="btn-back"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE MODAL FOR ZOOM -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="modal-close" onclick="closeModal()">&#215;</span>
+        <img class="modal-content" id="modalImage"> </img>
+    </div>
+
+    <!-- MOBILE MENU SCRIPT -->
+    <script type="text/javascript">
+
+//<![CDATA[
+
+window.addEventListener("load", function(){
+
+    const toggleBtn =
+    document.getElementById("menuToggle");
+
+    const overlay =
+    document.getElementById("overlay");
+
+    const sidebar =
+    document.querySelector(".sidebar");
+
+    if(toggleBtn && overlay && sidebar){
+
+        // TOGGLE SIDEBAR
+
+        toggleBtn.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.toggle("open");
+
+            if(sidebar.classList.contains("open")){
+
+                overlay.style.display = "block";
+
+                toggleBtn.innerHTML = "✕";
+
+            } else {
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+
+        // CLOSE WHEN CLICK OVERLAY
+
+        overlay.addEventListener(
+        "click",
+        function(){
+
+            sidebar.classList.remove("open");
+
+            overlay.style.display = "none";
+
+            toggleBtn.innerHTML = "☰";
+        });
+
+        // AUTO CLOSE AFTER MENU CLICK
+
+        const menuLinks =
+        document.querySelectorAll(
+        ".menu a, .menu .menu-link");
+
+        menuLinks.forEach(function(link){
+
+            link.addEventListener(
+            "click",
+            function(){
+
+                if(window.innerWidth <= 768){
+
+                    sidebar.classList.remove("open");
+
+                    overlay.style.display = "none";
+
+                    toggleBtn.innerHTML = "☰";
+                }
+            });
+        });
+
+        // WINDOW RESIZE
+
+        window.addEventListener(
+        "resize",
+        function(){
+
+            if(window.innerWidth > 768){
+
+                sidebar.classList.remove("open");
+
+                overlay.style.display = "none";
+
+                toggleBtn.innerHTML = "☰";
+            }
+        });
+    }
+
+});
+
+//]]>
+  
+
+   </script>
+</h:body>
+</html>

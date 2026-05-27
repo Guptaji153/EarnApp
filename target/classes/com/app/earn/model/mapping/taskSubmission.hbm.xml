@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.app.earn.pojo">
+
+	<class name="TaskSubmission" table="task_submissions">
+
+		<!-- Primary Key -->
+		<id name="id" column="id" type="long">
+			<generator class="identity" />
+		</id>
+
+		<!-- Flat foreign keys (NO relations) -->
+		<property name="taskId" column="task_id" type="long"
+			not-null="true" />
+		<property name="userId" column="user_id" type="long"
+			not-null="true" />
+
+		<!-- Proof & status -->
+		<property name="proofPath" column="proof_path" type="string"
+			not-null="true" />
+		<property name="status" column="status" type="string" />
+		<property name="rejectionReason" column="rejection_reason"
+			type="string" />
+
+		<!-- Audit fields -->
+		<property name="submittedAt" column="submitted_at"
+			type="timestamp" />
+		<property name="verifiedBy" column="verified_by" type="long" />
+		<property name="verifiedAt" column="verified_at"
+			type="timestamp" />
+		<property name="proofDescription" column="proof_description"
+			type="string" />
+	</class>
+
+</hibernate-mapping>
