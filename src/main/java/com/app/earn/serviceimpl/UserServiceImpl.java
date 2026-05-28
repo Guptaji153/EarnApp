@@ -29,13 +29,27 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String registerPartner(User user) {
 
-		String result = userDao.registerPartner(user);
+//		String result = userDao.registerPartner(user);
+//
+//		if (!result.startsWith("Partner registered")) {
+//			return result;
+//		}
+//
+//		User savedUser = userDao.findByEmail(user.getEmail());
+		
+//		User existingUser =
+//				userDao.findByEmail(user.getEmail());
 
-		if (!result.startsWith("Partner registered")) {
-			return result;
-		}
+		User existingUser =
+				userDao.findByEmailAndRole(
+				user.getEmail(),
+				"PARTNER"
+				);
+				if(existingUser != null &&
+				   "PARTNER".equals(existingUser.getRole())){
 
-		User savedUser = userDao.findByEmail(user.getEmail());
+				    return "Partner already registered with this email";
+				}
 
 		String otpValue = OtpUtil.generateOtp();
 
@@ -43,15 +57,22 @@ public class UserServiceImpl implements UserService {
 		cal.add(Calendar.MINUTE, 2);
 
 		UserOtp otp = new UserOtp();
-		otp.setUserId(savedUser.getId());
-		otp.setEmail(savedUser.getEmail());
-		otp.setMobile(savedUser.getPhone());
+		otp.setUserId(null);
+		otp.setEmail(user.getEmail());
+		otp.setMobile(user.getPhone());
 		otp.setOtpValue(otpValue);
 		otp.setPurpose("SIGNUP");
 		otp.setIsVerified(false);
 		otp.setCreatedAt(new Date());
 		otp.setExpiresAt(cal.getTime());
 
+		UserOtp oldOtp =
+				userOtpDao.getLatestOtpByEmail(user.getEmail());
+
+				if(oldOtp != null){
+
+				    userOtpDao.deleteOtp(oldOtp);
+				}
 		userOtpDao.saveOtp(otp);
 
 //        MailSend.sendInfo(
@@ -60,20 +81,41 @@ public class UserServiceImpl implements UserService {
 //                "Your OTP is: " + otpValue + "\nValid for 2 minutes."
 //        );
 
-		MailSend.sendInfo(savedUser.getEmail(), "EarnByApps OTP Verification", otpValue);
+		MailSend.sendInfo(user.getEmail(), "EarnByApps OTP Verification", otpValue);
 		return "OTP_SENT";
 	}
 
+	
+	@Override
+	public void finalRegisterPartner(User user){
+
+	    userDao.registerPartner(user);
+	}
+	
 	@Override
 	public String registerUser(User user) {
 
-		String result = userDao.registerUser(user);
+//		String result = userDao.registerUser(user);
+//
+//		if (!"USER_REGISTERED".equals(result)) {
+//			return result;
+//		}
+//
+//		User savedUser = userDao.findByEmail(user.getEmail());
+		
+//		User existingUser =
+//				userDao.findByEmail(user.getEmail());
+		User existingUser =
+				userDao.findByEmailAndRole(
+				user.getEmail(),
+				"USER"
+				);
 
-		if (!"USER_REGISTERED".equals(result)) {
-			return result;
-		}
+				if(existingUser != null &&
+				   "USER".equals(existingUser.getRole())){
 
-		User savedUser = userDao.findByEmail(user.getEmail());
+				    return "User already registered with this email";
+				}
 
 		String otpValue = OtpUtil.generateOtp();
 
@@ -83,9 +125,13 @@ public class UserServiceImpl implements UserService {
 
 		UserOtp otp = new UserOtp();
 
-		otp.setUserId(savedUser.getId());
-		otp.setEmail(savedUser.getEmail());
-		otp.setMobile(savedUser.getPhone());
+//		otp.setUserId(savedUser.getId());
+//		otp.setEmail(savedUser.getEmail());
+//		otp.setMobile(savedUser.getPhone());
+		
+		otp.setUserId(null);
+		otp.setEmail(user.getEmail());
+		otp.setMobile(user.getPhone());
 
 		otp.setOtpValue(otpValue);
 
@@ -97,6 +143,13 @@ public class UserServiceImpl implements UserService {
 
 		otp.setExpiresAt(cal.getTime());
 
+		UserOtp oldOtp =
+				userOtpDao.getLatestOtpByEmail(user.getEmail());
+
+				if(oldOtp != null){
+
+				    userOtpDao.deleteOtp(oldOtp);
+				}
 		userOtpDao.saveOtp(otp);
 
 //        MailSend.sendInfo(
@@ -107,11 +160,16 @@ public class UserServiceImpl implements UserService {
 //        + "\nValid for 2 minutes."
 //        );
 
-		MailSend.sendInfo(savedUser.getEmail(), "EarnByApps OTP Verification", otpValue);
+		MailSend.sendInfo(user.getEmail(), "EarnByApps OTP Verification", otpValue);
 
 		return "OTP_SENT";
 	}
 
+	@Override
+	public void finalRegisterUser(User user){
+
+	    userDao.registerUser(user);
+	}
 	// ================= VERIFY OTP =================
 	@Override
 	public String verifyOtp(String email, String enteredOtp) {
@@ -178,11 +236,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String resendOtp(String email) {
 
-		User savedUser = userDao.findByEmail(email);
-
-		if (savedUser == null) {
-			return "USER_NOT_FOUND";
-		}
+//		User savedUser = userDao.findByEmail(email);
+//
+//		if (savedUser == null) {
+//			return "USER_NOT_FOUND";
+//		}
 
 		// ================= CHECK LAST OTP =================
 
@@ -209,11 +267,11 @@ public class UserServiceImpl implements UserService {
 
 		UserOtp otp = new UserOtp();
 
-		otp.setUserId(savedUser.getId());
+		otp.setUserId(null);
 
-		otp.setEmail(savedUser.getEmail());
+		otp.setEmail(email);
 
-		otp.setMobile(savedUser.getPhone());
+		otp.setMobile(null);
 
 		otp.setOtpValue(otpValue);
 
@@ -225,9 +283,13 @@ public class UserServiceImpl implements UserService {
 
 		otp.setExpiresAt(cal.getTime());
 
+		if(latestOtp != null){
+
+		    userOtpDao.deleteOtp(latestOtp);
+		}
 		userOtpDao.saveOtp(otp);
 
-		MailSend.sendInfo(savedUser.getEmail(), "EarnByApps OTP Verification", otpValue);
+		MailSend.sendInfo(email, "EarnByApps OTP Verification", otpValue);
 
 		return "OTP_SENT";
 	}

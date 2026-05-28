@@ -180,13 +180,21 @@ public class UserController implements Serializable {
 
 		String result = userService.registerPartner(userBean);
 
+//		if ("OTP_SENT".equals(result)) {
+//
+//			context.getExternalContext().getSessionMap().put("otpEmail", userBean.getEmail());
+//
+//			return "/verifyOtp.xhtml?faces-redirect=true";
+//		}
+
 		if ("OTP_SENT".equals(result)) {
+
+			context.getExternalContext().getSessionMap().put("pendingPartner", userBean);
 
 			context.getExternalContext().getSessionMap().put("otpEmail", userBean.getEmail());
 
 			return "/verifyOtp.xhtml?faces-redirect=true";
 		}
-
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, result, null));
 
 		return null;
@@ -314,13 +322,21 @@ public class UserController implements Serializable {
 
 		String result = userService.registerUser(userBean);
 
+//		if ("OTP_SENT".equals(result)) {
+//
+//			context.getExternalContext().getSessionMap().put("otpEmail", userBean.getEmail());
+//
+//			return "/verifyOtp.xhtml?faces-redirect=true";
+//		}
+
 		if ("OTP_SENT".equals(result)) {
+
+			context.getExternalContext().getSessionMap().put("pendingUser", userBean);
 
 			context.getExternalContext().getSessionMap().put("otpEmail", userBean.getEmail());
 
 			return "/verifyOtp.xhtml?faces-redirect=true";
 		}
-
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, result, null));
 
 		return null;
@@ -342,11 +358,40 @@ public class UserController implements Serializable {
 
 		switch (result) {
 
+//		case "SUCCESS":
+//			context.getExternalContext().getSessionMap().remove("otpEmail");
+//			return "/login.xhtml?faces-redirect=true";
+
 		case "SUCCESS":
+
+			User pendingUser = (User) context.getExternalContext().getSessionMap().get("pendingUser");
+
+			User pendingPartner = (User) context.getExternalContext().getSessionMap().get("pendingPartner");
+
+			if (pendingUser != null && pendingPartner == null) {
+
+				userService.finalRegisterUser(pendingUser);
+
+				context.getExternalContext().getSessionMap().remove("pendingUser");
+			}
+
+			if (pendingPartner != null && pendingUser == null) {
+
+				userService.finalRegisterPartner(pendingPartner);
+
+				context.getExternalContext().getSessionMap().remove("pendingPartner");
+			}
+
 			context.getExternalContext().getSessionMap().remove("otpEmail");
+
 			return "/login.xhtml?faces-redirect=true";
 
 		case "OTP_EXPIRED":
+			context.getExternalContext().getSessionMap().remove("pendingUser");
+
+			context.getExternalContext().getSessionMap().remove("pendingPartner");
+
+			context.getExternalContext().getSessionMap().remove("otpEmail");
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "OTP expired", null));
 			break;
 
@@ -361,41 +406,41 @@ public class UserController implements Serializable {
 		return null;
 	}
 
-	// resend otp 
-	
+	// resend otp
+
 	public String resendOtp() {
 
-	    FacesContext context =
-	    FacesContext.getCurrentInstance();
+		FacesContext context = FacesContext.getCurrentInstance();
 
-	    String email =
-	    (String) context
-	    .getExternalContext()
-	    .getSessionMap()
-	    .get("otpEmail");
+		String email = (String) context.getExternalContext().getSessionMap().get("otpEmail");
+		
+		if(email == null){
 
-	    String result =
-	    userService.resendOtp(email);
+		    context.addMessage(
+		    null,
+		    new FacesMessage(
+		    FacesMessage.SEVERITY_ERROR,
+		    "Session expired",
+		    null
+		    ));
 
-	    if("OTP_SENT".equals(result)){
+		    return null;
+		}
 
-	        context.addMessage(null,
-	        new FacesMessage(
-	        FacesMessage.SEVERITY_INFO,
-	        "OTP resent successfully",
-	        null));
+		String result = userService.resendOtp(email);
 
-	    }
+		if ("OTP_SENT".equals(result)) {
 
-	    else if("WAIT_30_SECONDS".equals(result)){
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "OTP resent successfully", null));
 
-	        context.addMessage(null,
-	        new FacesMessage(
-	        FacesMessage.SEVERITY_WARN,
-	        "Please wait 30 seconds before resending",
-	        null));
-	    }
-	    return null;
+		}
+
+		else if ("WAIT_30_SECONDS".equals(result)) {
+
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Please wait 30 seconds before resending", null));
+		}
+		return null;
 	}
 //    public String login() {
 //

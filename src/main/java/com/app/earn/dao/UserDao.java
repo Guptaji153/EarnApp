@@ -9,6 +9,7 @@ public interface UserDao {
     String registerPartner(User user);
 
     User findByEmail(String email);
+    User findByEmailAndRole(String email,String role);
 
     User findByEmailAndPassword(String email, String password); 
     

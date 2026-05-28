@@ -13,8 +13,8 @@ public interface UserService {
     User getUser(String email,String password);
     
     String registerUser(User user);
-    
-   
+    void finalRegisterUser(User user);
+    void finalRegisterPartner(User user);
     // reset password
     String resendOtp(String email);
     public void updatePassword(Long userId,String password);

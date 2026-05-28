@@ -140,6 +140,39 @@ public class UserDaoImpl implements UserDao {
     }
     
     @Override
+    public User findByEmailAndRole(
+            String email,
+            String role) {
+
+        Session session = null;
+
+        try {
+
+            session =
+            SessionHelper
+            .getSessionFactory()
+            .openSession();
+
+            Query query =
+            session.createQuery(
+            "from User where email=:email and role=:role"
+            );
+
+            query.setParameter("email", email);
+
+            query.setParameter("role", role);
+
+            return (User) query.uniqueResult();
+
+        } finally {
+
+            if(session != null){
+                session.close();
+            }
+        }
+    }
+    
+    @Override
     public User findByEmailAndPassword(String email, String password) {
 
         Session session = null;
