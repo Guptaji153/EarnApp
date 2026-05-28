@@ -13,14 +13,14 @@ import javax.mail.internet.MimeMessage;
 
 public class MailSend {
 
-    private static final String FROM_EMAIL =
-            "email";
+	private static final String FROM_EMAIL =
+	        System.getenv("email");
 
-    private static final String SMTP_USERNAME =
-            "userName";
+	private static final String SMTP_USERNAME =
+	        System.getenv("userName");
 
-    private static final String SMTP_PASSWORD =
-            "passWord";
+	private static final String SMTP_PASSWORD =
+	        System.getenv("passWord");
 
     public static String sendInfo(
             String toEmail,
