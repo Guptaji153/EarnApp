@@ -12,230 +12,218 @@ import com.app.earn.util.SessionHelper;
 
 public class UserDaoImpl implements UserDao {
 
-    @Override
-    public String registerPartner(User user) {
+	@Override
+	public String registerPartner(User user) {
 
-        Session session = null;
-        Transaction tx = null;
+		Session session = null;
+		Transaction tx = null;
 
-        try {
-            session = SessionHelper.getSessionFactory().openSession();
-            tx = session.beginTransaction();
+		try {
+			session = SessionHelper.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 
-            // Check if email already exists
-            Query query = session.createQuery(
-            	    "from User where email = :email and role = :role");
+			// Check if email already exists
+			Query query = session.createQuery("from User where email = :email and role = :role");
 
-            	query.setParameter("email", user.getEmail());
+			query.setParameter("email", user.getEmail());
 
-            	query.setParameter("role", "PARTNER");
+			query.setParameter("role", "PARTNER");
 
-            	List list = query.list();
+			List list = query.list();
 
-            	if(list != null && !list.isEmpty()){
+			if (list != null && !list.isEmpty()) {
 
-            	    return "Partner already registered with this email";
-            	}
-            user.setRole("PARTNER");
-            user.setStatus("PENDING"); // 🔴 Pending admin approval
-            user.setCreatedAt(new java.util.Date());
+				return "Partner already registered with this email";
+			}
+			user.setRole("PARTNER");
+			user.setStatus("PENDING"); // 🔴 Pending admin approval
+			user.setCreatedAt(new java.util.Date());
 
+			session.save(user);
+			tx.commit();
 
-            session.save(user);
-            tx.commit();
+			return "Partner registered successfully. Waiting for admin approval.";
 
-            return "Partner registered successfully. Waiting for admin approval.";
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+			return "Registration failed";
 
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            e.printStackTrace();
-            return "Registration failed";
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
 
-        } finally {
-            if (session != null) session.close();
-        }
-    }
+	@Override
+	public String registerUser(User user) {
 
-    @Override
-    public String registerUser(User user) {
+		Session session = null;
+		Transaction tx = null;
 
-        Session session = null;
-        Transaction tx = null;
+		try {
 
-        try {
+			session = SessionHelper.getSessionFactory().openSession();
 
-            session =
-            SessionHelper.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 
-            tx = session.beginTransaction();
+			Query query = session.createQuery("from User where email=:email and role=:role");
 
-            Query query =
-            		session.createQuery(
-            		"from User where email=:email and role=:role"
-            		);
+			query.setParameter("email", user.getEmail());
 
-            		query.setParameter(
-            		"email",
-            		user.getEmail()
-            		);
+			query.setParameter("role", "USER");
 
-            		query.setParameter(
-            		"role",
-            		"USER"
-            		);
+			List list = query.list();
 
-            		List list = query.list();
+			if (list != null && !list.isEmpty()) {
 
-            		if(list != null && !list.isEmpty()){
+				return "User already registered with this email";
+			}
 
-            		    return "User already registered with this email";
-            		}
+			user.setRole("USER");
 
-            user.setRole("USER");
+			user.setStatus("ACTIVE");
 
-            user.setStatus("ACTIVE");
+			user.setCreatedAt(new java.util.Date());
 
-            user.setCreatedAt(new java.util.Date());
+			session.save(user);
 
-            session.save(user);
+			tx.commit();
 
-            tx.commit();
+			return "USER_REGISTERED";
 
-            return "USER_REGISTERED";
+		} catch (Exception e) {
 
-        } catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
 
-            if(tx != null){
-                tx.rollback();
-            }
+			e.printStackTrace();
 
-            e.printStackTrace();
+			return "Registration failed";
 
-            return "Registration failed";
+		} finally {
 
-        } finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
 
-            if(session != null){
-                session.close();
-            }
-        }
-    }
-    
-    @Override
-    public User findByEmail(String email) {
-
-        Session session = null;
-        try {
-            session = SessionHelper.getSessionFactory().openSession();
+	@Override
+	public User findByEmail(String email) {
 
-            Query query = session.createQuery(
-                    "from User where email = :email");
-            query.setParameter("email", email);
+		Session session = null;
+		try {
+			session = SessionHelper.getSessionFactory().openSession();
 
-            return (User) query.uniqueResult();
+			Query query = session.createQuery("from User where email = :email");
+			query.setParameter("email", email);
 
-        } finally {
-            if (session != null) session.close();
-        }
-    }
-    
-    @Override
-    public User findByEmailAndRole(
-            String email,
-            String role) {
+			return (User) query.uniqueResult();
 
-        Session session = null;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
 
-        try {
+	@Override
+	public User findByEmailAndRole(String email, String role) {
 
-            session =
-            SessionHelper
-            .getSessionFactory()
-            .openSession();
+		Session session = null;
 
-            Query query =
-            session.createQuery(
-            "from User where email=:email and role=:role"
-            );
+		try {
 
-            query.setParameter("email", email);
+			session = SessionHelper.getSessionFactory().openSession();
 
-            query.setParameter("role", role);
+			Query query = session.createQuery("from User where email=:email and role=:role");
 
-            return (User) query.uniqueResult();
+			query.setParameter("email", email);
 
-        } finally {
+			query.setParameter("role", role);
 
-            if(session != null){
-                session.close();
-            }
-        }
-    }
-    
-    @Override
-    public User findByEmailAndPassword(String email, String password) {
+			return (User) query.uniqueResult();
 
-        Session session = null;
+		} finally {
 
-        try {
-            session = SessionHelper.getSessionFactory().openSession();
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
 
-            Query query = session.createQuery(
-                "from User where email = :email and password = :password");
+	@Override
+	public User findByEmailPasswordAndRole(String email, String password, String role) {
 
-            query.setParameter("email", email);
-            query.setParameter("password", password);
+		Session session = null;
 
-            return (User) query.uniqueResult();
+		try {
 
-        } finally {
-            if (session != null)
-                session.close();
-        }
-    }
-    
-    @Override
-    public void updateUser(User user) {
+			session = SessionHelper.getSessionFactory().openSession();
 
-        Session session =
-        SessionHelper
-        .getSessionFactory()
-        .openSession();
+			Query query = session
+					.createQuery("from User where email = :email " + "and password = :password " + "and role = :role");
 
-        Transaction tx =
-        session.beginTransaction();
+			query.setParameter("email", email);
 
-        session.update(user);
+			query.setParameter("password", password);
 
-        tx.commit();
+			query.setParameter("role", role);
 
-        session.close();
-    }
-    
-    // Admin
-    
-    
-    
-    // reset password 
-    
-    @Override
-    public void updatePassword(Long userId, String password) {
+			return (User) query.uniqueResult();
 
-        Session session =
-        SessionHelper.getSessionFactory().openSession();
+		} finally {
 
-        Transaction tx =
-        session.beginTransaction();
+			if (session != null) {
 
-        User user =
-        (User) session.get(User.class,userId);
+				session.close();
+			}
+		}
+	}
 
-        user.setPassword(password);
+	@Override
+	public void updateUser(User user) {
 
-        session.update(user);
+		Session session = SessionHelper.getSessionFactory().openSession();
 
-        tx.commit();
+		Transaction tx = session.beginTransaction();
 
-        session.close();
-    }
+		// session.update(user);
+		User existing = (User) session.get(User.class, user.getId());
+
+		if (existing != null) {
+
+			existing.setLastLoginAt(user.getLastLoginAt());
+
+			session.update(existing);
+		}
+
+		tx.commit();
+
+		session.close();
+	}
+
+	// Admin
+
+	// reset password
+
+	@Override
+	public void updatePassword(Long userId, String password) {
+
+		Session session = SessionHelper.getSessionFactory().openSession();
+
+		Transaction tx = session.beginTransaction();
+
+		User user = (User) session.get(User.class, userId);
+
+		user.setPassword(password);
+
+		session.update(user);
+
+		tx.commit();
+
+		session.close();
+	}
 }

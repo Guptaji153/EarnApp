@@ -11,73 +11,120 @@ import com.app.earn.util.SessionHelper;
 
 public class UserOtpDaoImpl implements UserOtpDao {
 
-    @Override
-    public void saveOtp(UserOtp otp) {
-        Session session = null;
-        Transaction tx = null;
+	@Override
+	public void saveOtp(UserOtp otp) {
+		Session session = null;
+		Transaction tx = null;
 
-        try {
-            session = SessionHelper.getSessionFactory().openSession();
-            tx = session.beginTransaction();
-            session.save(otp);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        } finally {
-            if (session != null) session.close();
-        }
-    }
-    
-    @Override
-    public UserOtp getLatestOtpByEmail(String email) {
+		try {
+			session = SessionHelper.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.save(otp);
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+			throw e;
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
 
-        Session session = null;
+	@Override
+	public UserOtp getLatestOtpByEmail(String email) {
 
-        try {
-            session = SessionHelper.getSessionFactory().openSession();
+		Session session = null;
 
-            Query query = session.createQuery(
-                "from UserOtp where email = :email order by createdAt desc");
+		try {
+			session = SessionHelper.getSessionFactory().openSession();
 
-            query.setParameter("email", email);
-            query.setMaxResults(1);
+			Query query = session.createQuery("from UserOtp where email = :email order by createdAt desc");
 
-            return (UserOtp) query.uniqueResult();
+			query.setParameter("email", email);
+			query.setMaxResults(1);
 
-        } finally {
-            if (session != null)
-                session.close();
-        }
-    }
+			return (UserOtp) query.uniqueResult();
 
-    @Override
-    public void deleteOtp(UserOtp otp) {
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
 
-        Session session = null;
-        Transaction tx = null;
+	@Override
+	public void deleteOtp(UserOtp otp) {
 
-        try {
-            session = SessionHelper.getSessionFactory().openSession();
-            tx = session.beginTransaction();
+		Session session = null;
+		Transaction tx = null;
 
-            session.delete(otp);
+		try {
+			session = SessionHelper.getSessionFactory().openSession();
+			tx = session.beginTransaction();
 
-            tx.commit();
+			session.delete(otp);
 
-        } catch (Exception e) {
+			tx.commit();
 
-            if (tx != null)
-                tx.rollback();
+		} catch (Exception e) {
 
-            throw e;
+			if (tx != null)
+				tx.rollback();
 
-        } finally {
+			throw e;
 
-            if (session != null)
-                session.close();
-        }
-    }
+		} finally {
 
+			if (session != null)
+				session.close();
+		}
+	}
+
+
+	@Override
+    		public UserOtp getLatestOtpByEmailAndPurpose(
+    		        String email,
+    		        String purpose) {
+
+    		    Session session = null;
+
+    		    try {
+
+    		        session =
+    		        SessionHelper
+    		        .getSessionFactory()
+    		        .openSession();
+
+    		        Query query =
+    		        session.createQuery(
+    		        "from UserOtp " +
+    		        "where email = :email " +
+    		        "and purpose = :purpose " +
+    		        "order by createdAt desc"
+    		        );
+
+    		        query.setParameter(
+    		        "email",
+    		        email
+    		        );
+
+    		        query.setParameter(
+    		        "purpose",
+    		        purpose
+    		        );
+
+    		        query.setMaxResults(1);
+
+    		        return (UserOtp)
+    		        query.uniqueResult();
+
+    		    } finally {
+
+    		        if(session != null){
+
+    		            session.close();
+    		        }
+    		    }
+    		}
 
 }

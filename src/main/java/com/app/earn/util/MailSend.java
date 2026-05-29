@@ -13,14 +13,25 @@ import javax.mail.internet.MimeMessage;
 
 public class MailSend {
 
+	
 	private static final String FROM_EMAIL =
-	        System.getenv("email");
+	System.getenv("EMAIL");
 
 	private static final String SMTP_USERNAME =
-	        System.getenv("userName");
+	System.getenv("SMTP_USERNAME");
 
 	private static final String SMTP_PASSWORD =
-	        System.getenv("passWord");
+	System.getenv("SMTP_PASSWORD");
+	
+	static {
+
+        System.out.println("EMAIL = " + FROM_EMAIL);
+
+        System.out.println("SMTP_USERNAME = " + SMTP_USERNAME);
+
+        
+    }
+
 
     public static String sendInfo(
             String toEmail,
@@ -123,4 +134,30 @@ public class MailSend {
             return e.getMessage();
         }
     }
+    
+    
+    public static void sendInfoAsync(
+            String toEmail,
+            String subject,
+            String data){
+
+        new Thread(() -> {
+
+            try{
+
+                sendInfo(
+                toEmail,
+                subject,
+                data
+                );
+
+            }catch(Exception e){
+
+                e.printStackTrace();
+            }
+
+        }).start();
+    }
+    
+
 }

@@ -18,12 +18,21 @@ public class UserController implements Serializable {
 	private String enteredOtp;
 	private String email;
 	private String password;
+	private String role;
+
+//	@PostConstruct
+//	public void init() {
+//		System.out.println("Service injected: " + (userService != null));
+//	}
 
 	@PostConstruct
-	public void init() {
-		System.out.println("Service injected: " + (userService != null));
-	}
+	public void initialize() {
 
+		if (userBean == null) {
+
+			userBean = new User();
+		}
+	}
 	/*
 	 * ----------------------------- VALIDATION HELPERS
 	 * -----------------------------
@@ -347,7 +356,21 @@ public class UserController implements Serializable {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		String email = (String) context.getExternalContext().getSessionMap().get("otpEmail");
+		// String email = (String)
+		// context.getExternalContext().getSessionMap().get("otpEmail");
+
+		String purpose = (String) context.getExternalContext().getSessionMap().get("otpPurpose");
+
+		String email = null;
+
+		if ("RESET_PASSWORD".equals(purpose)) {
+
+			email = (String) context.getExternalContext().getSessionMap().get("resetEmail");
+
+		} else {
+
+			email = (String) context.getExternalContext().getSessionMap().get("otpEmail");
+		}
 
 		if (email == null) {
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Session expired", null));
@@ -364,10 +387,23 @@ public class UserController implements Serializable {
 
 		case "SUCCESS":
 
+			String otpPurpose = (String) context.getExternalContext().getSessionMap().get("otpPurpose");
+
+			if ("RESET_PASSWORD".equals(otpPurpose)) {
+
+				context.getExternalContext().getSessionMap().put("resetVerified", true);
+
+				return "/resetPasswordGlobal.xhtml?faces-redirect=true";
+			}
+
 			User pendingUser = (User) context.getExternalContext().getSessionMap().get("pendingUser");
 
 			User pendingPartner = (User) context.getExternalContext().getSessionMap().get("pendingPartner");
 
+			// debug
+			System.out.println("Pending User = " + pendingUser);
+
+			System.out.println("Pending Partner = " + pendingPartner);
 			if (pendingUser != null && pendingPartner == null) {
 
 				userService.finalRegisterUser(pendingUser);
@@ -383,13 +419,16 @@ public class UserController implements Serializable {
 			}
 
 			context.getExternalContext().getSessionMap().remove("otpEmail");
+			context.getExternalContext().getSessionMap().remove("otpPurpose");
 
+			userBean = new User();
 			return "/login.xhtml?faces-redirect=true";
 
 		case "OTP_EXPIRED":
 			context.getExternalContext().getSessionMap().remove("pendingUser");
 
 			context.getExternalContext().getSessionMap().remove("pendingPartner");
+			context.getExternalContext().getSessionMap().remove("otpPurpose");
 
 			context.getExternalContext().getSessionMap().remove("otpEmail");
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "OTP expired", null));
@@ -412,22 +451,39 @@ public class UserController implements Serializable {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		String email = (String) context.getExternalContext().getSessionMap().get("otpEmail");
-		
-		if(email == null){
+		// String email = (String)
+		// context.getExternalContext().getSessionMap().get("otpEmail");
 
-		    context.addMessage(
-		    null,
-		    new FacesMessage(
-		    FacesMessage.SEVERITY_ERROR,
-		    "Session expired",
-		    null
-		    ));
+		String purpose = (String) context.getExternalContext().getSessionMap().get("otpPurpose");
 
-		    return null;
+		String email = null;
+
+		if ("RESET_PASSWORD".equals(purpose)) {
+
+			email = (String) context.getExternalContext().getSessionMap().get("resetEmail");
+
+		} else {
+
+			email = (String) context.getExternalContext().getSessionMap().get("otpEmail");
 		}
 
-		String result = userService.resendOtp(email);
+		if (email == null) {
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Session expired", null));
+
+			return null;
+		}
+
+		// String result = userService.resendOtp(email);
+
+		String otpPurpose = (String) context.getExternalContext().getSessionMap().get("otpPurpose");
+
+		if (otpPurpose == null) {
+
+			otpPurpose = "SIGNUP";
+		}
+
+		String result = userService.resendOtp(email, otpPurpose);
 
 		if ("OTP_SENT".equals(result)) {
 
@@ -542,6 +598,14 @@ public class UserController implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

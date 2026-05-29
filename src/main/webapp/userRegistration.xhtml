@@ -89,7 +89,7 @@
 					</div>
 					<div class="input-icon-wrapper">
 						<span class="input-icon">📧</span>
-						<h:inputText id="email" value="#{userBean.email}" styleClass="input-field"
+						<h:inputText id="email" value="#{userController.user.email}" styleClass="input-field"
 							placeholder="Enter your email" />
 					</div>
 					<h:message for="email" styleClass="field-error" />
@@ -103,7 +103,7 @@
 					</div>
 					<div class="input-icon-wrapper">
 						<span class="input-icon">🔒</span>
-						<h:inputSecret id="password" value="#{userBean.password}"
+						<h:inputSecret id="password" value="#{userController.user.password}"
 							styleClass="input-field" placeholder="Create a password" />
 					</div>
 					<div class="password-hint">
@@ -121,7 +121,7 @@
 					</div>
 					<div class="input-icon-wrapper">
 						<span class="input-icon">👤</span>
-						<h:inputText id="fullName" value="#{userBean.fullName}"
+						<h:inputText id="fullName" value="#{userController.user.fullName}"
 							styleClass="input-field" placeholder="Enter your full name" />
 					</div>
 					<h:message for="fullName" styleClass="field-error" />
@@ -135,13 +135,13 @@
 					</div>
 					<div class="input-icon-wrapper">
 						<span class="input-icon">📱</span>
-						<h:inputText id="phone" value="#{userBean.phone}" 
+						<h:inputText id="phone" value="#{userController.user.phone}"
 							styleClass="input-field" placeholder="Enter your phone number" />
 					</div>
 					<h:message for="phone" styleClass="field-error" />
 				</div>
 
-				<h:selectOneMenu id="country" value="#{userBean.country}"
+				<h:selectOneMenu id="country" value="#{userController.user.country}"
 					styleClass="input-field">
 
 					<f:selectItem itemLabel="Select Country" itemValue="" />

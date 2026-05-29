@@ -248,8 +248,8 @@
 		</managed-property>
 
 	</managed-bean>
-	
-		<managed-bean>
+
+	<managed-bean>
 
 		<managed-bean-name>adminCampaignController</managed-bean-name>
 
@@ -281,6 +281,29 @@
 		</managed-property>
 
 	</managed-bean>
+
+	
+	<managed-bean>
+
+		<managed-bean-name>forgotPasswordController</managed-bean-name>
+
+		<managed-bean-class>com.app.earn.controller.ForgotPasswordController</managed-bean-class>
+
+		<managed-bean-scope>request</managed-bean-scope>
+
+		<managed-property>
+
+			<property-name>userService</property-name>
+
+			<value>
+				#{userService}
+			</value>
+
+		</managed-property>
+
+	</managed-bean>
+	
+
 
 
 </faces-config>
