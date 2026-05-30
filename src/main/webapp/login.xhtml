@@ -113,7 +113,15 @@
 						</div>
 					</div>
 
-					<h:selectOneRadio >
+					<h3>RADIO TEST</h3>
+
+					<input type="radio" name="testRole" value="USER" /> User
+
+<input type="radio" name="testRole" value="PARTNER" /> Partner
+<h:outputText value="ROLE TEST"/>
+
+					<h:selectOneRadio value="#{authController.role}" required="true"
+						requiredMessage="Please select login type">
 
 						<f:selectItem itemLabel="User" itemValue="USER" />
 
