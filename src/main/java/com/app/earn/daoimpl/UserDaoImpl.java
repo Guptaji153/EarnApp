@@ -138,8 +138,11 @@ public class UserDaoImpl implements UserDao {
 
 			session = SessionHelper.getSessionFactory().openSession();
 
+			System.out.println("DAO EMAIL = " + email);
+			System.out.println("DAO ROLE = " + role);
 			Query query = session.createQuery("from User where email=:email and role=:role");
 
+			
 			query.setParameter("email", email);
 
 			query.setParameter("role", role);

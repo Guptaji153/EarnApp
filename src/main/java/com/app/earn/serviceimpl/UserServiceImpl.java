@@ -103,8 +103,11 @@ public class UserServiceImpl implements UserService {
 
 //		User existingUser =
 //				userDao.findByEmail(user.getEmail());
+		System.out.println("REGISTER USER CALLED");
+		System.out.println("EMAIL = " + user.getEmail());
 		User existingUser = userDao.findByEmailAndRole(user.getEmail(), "USER");
 
+		System.out.println("EXISTING USER = " + existingUser);
 		if (existingUser != null && "USER".equals(existingUser.getRole())) {
 
 			return "User already registered with this email";
