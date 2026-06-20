@@ -17,7 +17,15 @@ public class AuthController implements Serializable {
 	private String role;
 
 	private UserService userService;
+	private String confirmPassword;
 
+	public String getConfirmPassword() {
+	    return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+	    this.confirmPassword = confirmPassword;
+	}
 	// ================= LOGIN =================
 
 	public String login() {
@@ -140,18 +148,107 @@ public class AuthController implements Serializable {
 
 	private String newPassword;
 
+//	public String updatePassword() {
+//
+//		User user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+//
+//		userService.updatePassword(user.getId(), newPassword);
+//
+//		user.setPassword(newPassword);
+//
+//		FacesContext.getCurrentInstance().addMessage(null,
+//				new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Updated Successfully", null));
+//
+//		return null;
+//	}
+	
+	
 	public String updatePassword() {
 
-		User user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedUser");
+	    FacesContext context =
+	            FacesContext.getCurrentInstance();
 
-		userService.updatePassword(user.getId(), newPassword);
+	    // Empty validation
 
-		user.setPassword(newPassword);
+	    if (newPassword == null ||
+	        newPassword.trim().isEmpty()) {
 
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Password Updated Successfully", null));
+	        context.addMessage(
+	            null,
+	            new FacesMessage(
+	                FacesMessage.SEVERITY_ERROR,
+	                "New Password is required",
+	                null));
 
-		return null;
+	        return null;
+	    }
+
+	    if (confirmPassword == null ||
+	        confirmPassword.trim().isEmpty()) {
+
+	        context.addMessage(
+	            null,
+	            new FacesMessage(
+	                FacesMessage.SEVERITY_ERROR,
+	                "Confirm Password is required",
+	                null));
+
+	        return null;
+	    }
+
+	    // Match validation
+
+	    if (!newPassword.equals(confirmPassword)) {
+
+	        context.addMessage(
+	            null,
+	            new FacesMessage(
+	                FacesMessage.SEVERITY_ERROR,
+	                "Passwords do not match",
+	                null));
+
+	        return null;
+	    }
+
+	    // Strength validation
+
+	    String regex =
+	        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{6,}$";
+
+	    if (!newPassword.matches(regex)) {
+
+	        context.addMessage(
+	            null,
+	            new FacesMessage(
+	                FacesMessage.SEVERITY_ERROR,
+	                "Password must contain uppercase, lowercase, number and special character and be at least 6 characters long",
+	                null));
+
+	        return null;
+	    }
+
+	    User user =
+	        (User) context.getExternalContext()
+	                      .getSessionMap()
+	                      .get("loggedUser");
+
+	    userService.updatePassword(
+	            user.getId(),
+	            newPassword);
+
+	    user.setPassword(newPassword);
+
+	    context.addMessage(
+	        null,
+	        new FacesMessage(
+	            FacesMessage.SEVERITY_INFO,
+	            "Password Updated Successfully",
+	            null));
+
+	    newPassword = null;
+	    confirmPassword = null;
+
+	    return null;
 	}
 
 	public void prepareAdminLogin() {

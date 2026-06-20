@@ -53,11 +53,10 @@
                             </div>
                             <div class="input-icon-wrapper">
                                 <span class="input-icon">🔒</span>
-                                <h:inputSecret value="#{authController.newPassword}" 
-                                             required="true" 
-                                             styleClass="input-field" 
-                                             id="newPassword"
-                                             placeholder="Enter your new password"/>
+                               <h:inputSecret value="#{authController.newPassword}" 
+             styleClass="input-field password-field" 
+             id="newPassword"
+             placeholder="Enter your new password"/>
                             </div>
                             <div class="password-hint">
                                 <span class="hint-icon">ℹ️</span>
@@ -73,10 +72,10 @@
                             </div>
                             <div class="input-icon-wrapper">
                                 <span class="input-icon">🔒</span>
-                                <h:inputSecret styleClass="input-field" 
-                                             id="confirmPassword"
-                                             placeholder="Confirm your new password"
-                                             required="true"/>
+                               <h:inputSecret value="#{authController.confirmPassword}"
+               styleClass="input-field"
+               id="confirmPassword"
+               placeholder="Confirm your new password"/>
                             </div>
                             <div class="password-match-error" id="matchError" style="display:none;">
                                 <span class="error-icon">⚠️</span>
@@ -255,12 +254,12 @@ function checkPasswordStrength(password) {
 document.addEventListener('DOMContentLoaded', function() {
 
     const passwordField =
-        document.getElementById('resetPasswordForm:newPassword');
+        document.querySelector('.password-field');
 
-    if (passwordField) {
+    if(passwordField){
 
-        passwordField.addEventListener('keyup', function() {
-
+        passwordField.addEventListener('input', function(){
+        	console.log("Typing:", this.value);
             checkPasswordStrength(this.value);
 
         });
