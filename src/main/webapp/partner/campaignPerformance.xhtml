@@ -182,35 +182,58 @@
                         </h:dataTable>
                         
                         <!-- Empty State -->
-                        <div class="empty-state" rendered="#{empty campaignPerformanceController.statsList}">
-                            <div class="empty-icon">📭</div>
-                            <h3>No Campaign Data Found</h3>
-                            <p>No campaigns match your search criteria. Try different keywords or create a new campaign.</p>
-                        </div>
+                    <h:panelGroup rendered="#{empty campaignPerformanceController.statsList}"
+              layout="block">
+
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No Campaign Data Found</h3>
+        <p>No campaigns match your search criteria. Try different keywords or create a new campaign.</p>
+    </div>
+
+</h:panelGroup>
                     </h:form>
                 </div>
             </div>
 
             <!-- PAGINATION -->
-            <div class="paginationWrapper" rendered="#{not empty campaignPerformanceController.statsList}">
-                <div class="paginationLeft">
-                    <h:form>
-                        <div class="page-buttons">
-                            <h:commandButton value="← Previous" styleClass="pageBtn" action="#{campaignPerformanceController.prevPage}" 
-                                           disabled="#{campaignPerformanceController.page == 0}"/>
-                            <h:commandButton value="Next →" styleClass="pageBtn" action="#{campaignPerformanceController.nextPage}"
-                                           disabled="#{campaignPerformanceController.endRecord >= campaignPerformanceController.totalRecords}"/>
-                        </div>
-                    </h:form>
-                </div>
+         <h:panelGroup rendered="#{not empty campaignPerformanceController.statsList}"
+              layout="block">
 
-                <div class="paginationRight">
-                    <span class="pageInfo">
-                        📄 Page #{campaignPerformanceController.currentPage} 
-                        (#{campaignPerformanceController.startRecord} - #{campaignPerformanceController.endRecord} of #{campaignPerformanceController.totalRecords})
-                    </span>
+    <div class="paginationWrapper">
+
+        <div class="paginationLeft">
+            <h:form>
+                <div class="page-buttons">
+
+                    <h:commandButton
+                        value="← Previous"
+                        styleClass="pageBtn"
+                        action="#{campaignPerformanceController.prevPage}"
+                        disabled="#{campaignPerformanceController.page == 0}" />
+
+                    <h:commandButton
+                        value="Next →"
+                        styleClass="pageBtn"
+                        action="#{campaignPerformanceController.nextPage}"
+                        disabled="#{campaignPerformanceController.endRecord >= campaignPerformanceController.totalRecords}" />
+
                 </div>
-            </div>
+            </h:form>
+        </div>
+
+        <div class="paginationRight">
+            <span class="pageInfo">
+                📄 Page #{campaignPerformanceController.currentPage}
+                (#{campaignPerformanceController.startRecord}
+                - #{campaignPerformanceController.endRecord}
+                of #{campaignPerformanceController.totalRecords})
+            </span>
+        </div>
+
+    </div>
+
+</h:panelGroup>
         </div>
     </div>
 

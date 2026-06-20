@@ -175,10 +175,13 @@
                                 </f:facet>
                                 <div class="clickable-row" onclick="window.location='editCampaign.xhtml?taskId=#{t.id}'">
                                     <span class="cell-date">
-                                        <h:outputText value="#{t.approvedAt}" rendered="#{not empty t.approvedAt}">
-                                            <f:convertDateTime pattern="dd MMM yyyy"/>
-                                        </h:outputText>
-                                        <span rendered="#{empty t.approvedAt}">—</span>
+                                       <h:outputText value="#{t.approvedAt}" rendered="#{not empty t.approvedAt}">
+    <f:convertDateTime pattern="dd MMM yyyy"/>
+</h:outputText>
+
+<h:panelGroup rendered="#{empty t.approvedAt}">
+    <span>—</span>
+</h:panelGroup>
                                     </span>
                                 </div>
                             </h:column>
@@ -203,33 +206,52 @@
                         </h:dataTable>
                         
                         <!-- Empty State -->
-                        <div class="empty-state" rendered="#{empty taskController.myTasks}">
-                            <div class="empty-icon">📭</div>
-                            <h3>No Campaigns Found</h3>
-                            <p>You haven't created any campaigns yet. Click "Create Campaign" to get started.</p>
-                        </div>
+                       <h:panelGroup rendered="#{empty taskController.myTasks}"
+              layout="block">
+
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No Campaigns Found</h3>
+        <p>You haven't created any campaigns yet. Click "Create Campaign" to get started.</p>
+    </div>
+
+</h:panelGroup>
                     </h:form>
                 </div>
             </div>
 
             <!-- PAGINATION -->
-            <div class="paginationWrapper" rendered="#{not empty taskController.myTasks}">
-                <div class="paginationLeft">
-                    <h:form>
-                        <div class="page-buttons">
-                            <h:commandButton value="← Previous" styleClass="pageBtn" action="#{taskController.prevPage}" disabled="#{taskController.page == 0}"/>
-                            <h:commandButton value="Next →" styleClass="pageBtn" action="#{taskController.nextPage}"/>
-                        </div>
-                    </h:form>
-                </div>
+         <h:panelGroup rendered="#{not empty taskController.myTasks}"
+              layout="block">
 
-                <div class="paginationRight">
-                    <span class="pageInfo">
-                        📄 Page #{taskController.currentPage} 
-                        (#{taskController.startRecord} - #{taskController.endRecord} of #{taskController.totalRecords})
-                    </span>
+    <div class="paginationWrapper">
+
+        <div class="paginationLeft">
+            <h:form>
+                <div class="page-buttons">
+                    <h:commandButton value="← Previous"
+                        styleClass="pageBtn"
+                        action="#{taskController.prevPage}"
+                        disabled="#{taskController.page == 0}"/>
+
+                    <h:commandButton value="Next →"
+                        styleClass="pageBtn"
+                        action="#{taskController.nextPage}"/>
                 </div>
-            </div>
+            </h:form>
+        </div>
+
+        <div class="paginationRight">
+            <span class="pageInfo">
+                📄 Page #{taskController.currentPage}
+                (#{taskController.startRecord} - #{taskController.endRecord}
+                of #{taskController.totalRecords})
+            </span>
+        </div>
+
+    </div>
+
+</h:panelGroup>
         </div>
     </div>
 
