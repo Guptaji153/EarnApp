@@ -391,6 +391,7 @@ body {
 .submission-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 800px;
 }
 
 .submission-table th {
@@ -405,6 +406,17 @@ body {
   border-bottom: 2px solid var(--gray-200);
 }
 
+/* NEW: Header cell with icons */
+.header-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-icon-cell {
+  font-size: 0.9rem;
+}
+
 .submission-table td {
   padding: 1rem 1.2rem;
   border-bottom: 1px solid var(--gray-100);
@@ -416,15 +428,12 @@ body {
   background: var(--gray-50);
 }
 
-/* Cell Styles */
+/* Cell Styles - Removed icons from rows */
 .cell-taskid, .cell-user, .cell-proof, .cell-date, .cell-reason {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-.taskid-icon, .user-icon, .proof-icon, .date-icon, .reason-icon {
-  font-size: 1rem;
+  padding-left: 0.5rem;
 }
 
 .taskid-link {
@@ -616,8 +625,8 @@ body {
   background: var(--primary);
   color: white;
   border: none;
-  width: 45px;
-  height: 45px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 1.5rem;
@@ -642,164 +651,45 @@ body {
   transition: all var(--transition-base);
 }
 
-/* Add these styles for clickable rows */
-
-/* Make table row clickable indicator */
+/* Row click styles */
 .submission-table tr {
-    cursor: pointer;
-    transition: background-color var(--transition-fast);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
 }
 
 .submission-table tr:hover {
-    background-color: var(--gray-50);
+  background-color: var(--gray-50);
 }
 
-/* Ensure action buttons and proof links don't trigger row click */
 .action-buttons,
 .btn-approve,
 .btn-reject,
 .proof-link,
 .reason-wrapper input,
 .reason-wrapper textarea {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
-/* Add visual feedback for clickable cells */
 .cell-taskid,
 .cell-user,
 .cell-date,
 .cell-reason {
-    transition: all var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .cell-taskid:hover .taskid-link,
 .cell-user:hover .user-name {
-    color: var(--primary);
+  color: var(--primary);
 }
 
-/* Ensure the row click doesn't interfere with form inputs */
 .reason-input {
-    position: relative;
-    z-index: 3;
+  position: relative;
+  z-index: 3;
 }
 
-/* Mobile menu toggle - ensure it's visible */
-.menu-toggle {
-    display: none;
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 1002;
-    background: var(--primary);
-    color: white;
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-size: 1.5rem;
-    box-shadow: var(--shadow-md);
-    transition: all var(--transition-base);
-}
-
-.menu-toggle:hover {
-    background: var(--primary-dark);
-    transform: scale(1.05);
-}
-
-/* Overlay for mobile */
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    transition: all var(--transition-base);
-}
-
-/* Ensure sidebar is above overlay */
-.sidebar {
-    z-index: 1000;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
-    
-    .sidebar.open {
-        transform: translateX(0);
-    }
-    
-    .main {
-        padding-top: 4.5rem;
-    }
-}
-
-/* Fix for proof link to ensure it opens image */
-.proof-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--gray-100);
-    padding: 0.4rem 0.8rem;
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    color: var(--primary);
-    font-weight: 500;
-    font-size: 0.8rem;
-    transition: all var(--transition-fast);
-    pointer-events: auto;
-}
-
-.proof-link:hover {
-    background: var(--primary-bg-light);
-    transform: translateY(-1px);
-}
-
-/* Ensure buttons are clickable */
-.btn-approve, .btn-reject {
-    pointer-events: auto;
-    position: relative;
-    z-index: 10;
-}
-
-/* Row click indicator - change cursor for entire row */
-.submission-table tr {
-    cursor: pointer;
-}
-
-/* But keep cursor default on action buttons */
 .action-buttons {
-    cursor: default;
-}
-
-/* Style for task ID link - make it look clickable */
-.taskid-link {
-    color: var(--primary);
-    font-weight: 600;
-    transition: color var(--transition-fast);
-}
-
-.taskid-link:hover {
-    color: var(--primary-dark);
-}
-
-/* Ensure date and user cells show pointer */
-.cell-date, .cell-user {
-    cursor: pointer;
+  cursor: default;
 }
 
 /* ANIMATIONS */
@@ -864,7 +754,9 @@ body {
 
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .sidebar {

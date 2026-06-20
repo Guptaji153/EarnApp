@@ -1,8 +1,7 @@
 /* ========================================
-   REGISTRATION PAGES | MODERN SAAS-LEVEL STYLESHEET
-   WITH NAVBAR INTEGRATION
+   OTP VERIFICATION PAGE | MODERN SAAS-LEVEL STYLESHEET
+   MATCHES LOGIN & FORGOT PASSWORD STYLING
    FULLY RESPONSIVE
-   USED FOR BOTH USER & PARTNER REGISTRATION
 ======================================== */
 
 /* VARIABLES */
@@ -60,6 +59,7 @@
   
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  --gradient-dark: linear-gradient(135deg, #1f2937 0%, #111827 100%);
 }
 
 /* RESET & BASE */
@@ -71,7 +71,7 @@
 
 html, body {
   height: 100%;
-  overflow: hidden; /* Prevent scrolling when content doesn't exceed viewport */
+  overflow: hidden;
 }
 
 body {
@@ -124,7 +124,7 @@ body::before {
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
   transition: all var(--transition-base);
   border-bottom: 1px solid rgba(15, 118, 110, 0.1);
-  flex-shrink: 0; /* Prevent navbar from shrinking */
+  flex-shrink: 0;
 }
 
 .top-navbar.scrolled {
@@ -251,6 +251,10 @@ body::before {
   border-radius: var(--radius-md);
 }
 
+.nav-btn-login.active {
+  background: rgba(15, 118, 110, 0.08);
+}
+
 .nav-btn-login:hover {
   background: rgba(15, 118, 110, 0.08);
   transform: translateY(-1px);
@@ -266,10 +270,6 @@ body::before {
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
   box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
-}
-
-.nav-btn-register.active {
-  background: var(--primary-dark);
 }
 
 .nav-btn-register:hover {
@@ -309,19 +309,22 @@ body::before {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* REGISTRATION CONTAINER */
-.register-container {
+/* ========================================
+   OTP CONTAINER
+======================================== */
+
+.otp-container {
   width: 100%;
-  max-width: 520px;
-  margin: auto; /* Center vertically and horizontally */
+  max-width: 480px;
+  margin: auto;
   padding: 1rem;
   position: relative;
   z-index: 1;
   animation: slideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  flex: 1; /* Take remaining space */
+  flex: 1;
   display: flex;
-  align-items: center; /* Vertical centering */
-  justify-content: center; /* Horizontal centering */
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes slideUp {
@@ -335,8 +338,8 @@ body::before {
   }
 }
 
-/* REGISTRATION CARD */
-.register-card {
+/* OTP CARD */
+.otp-card {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
@@ -347,13 +350,13 @@ body::before {
   width: 100%;
 }
 
-.register-card:hover {
+.otp-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.3);
 }
 
 /* HEADER SECTION */
-.register-header {
+.otp-header {
   text-align: center;
   margin-bottom: var(--spacing-lg);
 }
@@ -369,33 +372,41 @@ body::before {
   box-shadow: var(--shadow-sm);
 }
 
-.register-logo-icon {
-  font-size: 1.6rem;
+.otp-logo-icon {
+  font-size: 1.8rem;
   display: inline-block;
   transition: transform 0.3s ease;
 }
 
-.register-logo-text {
-  font-size: 1.2rem;
-  font-weight: 700;
+.otp-logo-text {
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--white);
   letter-spacing: -0.5px;
 }
 
-.register-header h2 {
+.otp-header h2 {
   font-size: clamp(1.5rem, 5vw, 1.8rem);
   font-weight: 700;
   color: var(--dark);
   margin-bottom: var(--spacing-xs);
 }
 
-.register-header p {
+.otp-header p {
   color: var(--gray-500);
   font-size: 0.9rem;
 }
 
-/* FORM STYLES */
-.register-form {
+/* ========================================
+   FORM STYLES
+======================================== */
+
+.otp-form {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Message Container */
+.message-container {
   margin-bottom: var(--spacing-md);
 }
 
@@ -404,22 +415,12 @@ body::before {
   margin-bottom: var(--spacing-md);
 }
 
-.input-label-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: var(--spacing-xs);
-}
-
-.label-icon {
-  font-size: 0.85rem;
-}
-
 .input-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--gray-700);
   display: block;
+  margin-bottom: var(--spacing-xs);
 }
 
 /* Input with Icon */
@@ -433,7 +434,7 @@ body::before {
 .input-icon {
   position: absolute;
   left: 1rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   pointer-events: none;
   transition: all var(--transition-base);
   opacity: 0.6;
@@ -462,64 +463,63 @@ body::before {
   color: var(--primary);
 }
 
-/* Select dropdown styling */
-select.input-field {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 2.5rem;
-  cursor: pointer;
+/* OTP Input Specific */
+.otp-input {
+  text-align: center;
+  letter-spacing: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0.875rem 0.5rem 0.875rem 0.5rem;
 }
 
-select.input-field:focus {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230f766e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+/* ========================================
+   TIMER
+======================================== */
+
+.timer-container {
+  margin-bottom: var(--spacing-md);
 }
 
-/* Field Error */
-.field-error {
-  color: var(--danger);
-  font-size: 0.7rem;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-/* Password Hint */
-.password-hint {
+.timer {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: 0.5rem;
-  font-size: 0.7rem;
-  color: var(--gray-500);
-}
-
-.hint-icon {
-  font-size: 0.8rem;
-}
-
-/* Info Message */
-.info-message {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  background: #fef3c7;
   padding: 0.75rem;
+  background: var(--gray-100);
   border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-md);
-  font-size: 0.8rem;
-  color: #92400e;
-  border-left: 3px solid var(--warning);
+  font-size: 0.95rem;
+  color: var(--gray-700);
 }
 
-.info-icon {
-  font-size: 1rem;
-  flex-shrink: 0;
+.timer-icon {
+  font-size: 1.2rem;
 }
 
-/* Register Button */
-.register-btn {
+.timer-text {
+  font-weight: 500;
+}
+
+#timerDisplay {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+#timerDisplay.expired {
+  color: var(--danger);
+}
+
+/* ========================================
+   BUTTON GROUP
+======================================== */
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.verify-btn {
   width: 100%;
   padding: 0.875rem;
   background: var(--gradient-primary);
@@ -535,7 +535,7 @@ select.input-field:focus {
   overflow: hidden;
 }
 
-.register-btn::before {
+.verify-btn::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -548,46 +548,93 @@ select.input-field:focus {
   transition: width 0.6s, height 0.6s;
 }
 
-.register-btn:hover::before {
+.verify-btn:hover::before {
   width: 300px;
   height: 300px;
 }
 
-.register-btn:hover {
+.verify-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-primary);
 }
 
-.register-btn:active {
+.verify-btn:active {
   transform: translateY(0);
 }
 
-/* Login Link */
-.login-link {
+.verify-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.resend-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.resend-btn:hover:not(:disabled) {
+  background: var(--gray-300);
+  transform: translateY(-2px);
+}
+
+.resend-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ========================================
+   BACK TO LOGIN LINK
+======================================== */
+
+.back-to-login {
   text-align: center;
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--gray-300);
 }
 
-.login-link p {
-  font-size: 0.875rem;
-  color: var(--gray-500);
-}
-
-.login-link a {
+.back-to-login a {
   color: var(--primary);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   transition: all var(--transition-fast);
+  font-size: 0.9rem;
 }
 
-.login-link a:hover {
+.back-to-login a:hover {
   color: var(--primary-dark);
   text-decoration: underline;
 }
 
-/* SCROLL TOP BUTTON - Hidden by default */
+/* ========================================
+   FOOTER
+======================================== */
+
+.otp-footer {
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.otp-footer p {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+/* ========================================
+   SCROLL TOP BUTTON - Hidden by default
+======================================== */
+
 #scrollTopBtn {
   display: none !important;
   position: fixed;
@@ -614,7 +661,10 @@ select.input-field:focus {
   box-shadow: var(--shadow-lg);
 }
 
-/* RESPONSIVE DESIGN */
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
 @media (max-width: 1024px) {
   .nav-container {
     padding: 0.8rem 1.5rem;
@@ -662,21 +712,21 @@ select.input-field:focus {
     overflow: hidden;
   }
   
-  .register-container {
+  .otp-container {
     margin: 0 auto;
     padding: 1rem;
   }
   
-  .register-card {
+  .otp-card {
     padding: var(--spacing-lg) var(--spacing-md);
   }
   
-  .register-logo-icon {
-    font-size: 1.3rem;
+  .otp-logo-icon {
+    font-size: 1.5rem;
   }
   
-  .register-logo-text {
-    font-size: 1rem;
+  .otp-logo-text {
+    font-size: 1.3rem;
   }
   
   .input-field {
@@ -703,32 +753,34 @@ select.input-field:focus {
     font-size: 0.8rem;
   }
   
-  .register-card {
+  .otp-card {
     padding: var(--spacing-md);
   }
   
-  .input-label-wrapper {
-    margin-bottom: 0.3rem;
+  .otp-input {
+    letter-spacing: 4px;
+    font-size: 1.2rem;
   }
   
-  .info-message {
-    font-size: 0.7rem;
+  .timer {
+    font-size: 0.85rem;
+    padding: 0.6rem;
   }
 }
 
-/* ANIMATION FOR FORM ELEMENTS */
+/* ========================================
+   ANIMATIONS FOR FORM ELEMENTS
+======================================== */
+
 .input-group {
   animation: fadeIn 0.5s ease backwards;
   animation-delay: calc(var(--order) * 0.1s);
 }
 
 .input-group:nth-child(1) { --order: 1; }
-.input-group:nth-child(2) { --order: 2; }
-.input-group:nth-child(3) { --order: 3; }
-.input-group:nth-child(4) { --order: 4; }
-.input-group:nth-child(5) { --order: 5; }
-.info-message { --order: 6; animation: fadeIn 0.5s ease 0.3s backwards; }
-.register-btn { --order: 7; animation: fadeIn 0.5s ease 0.4s backwards; }
+.timer-container { --order: 2; animation: fadeIn 0.5s ease 0.15s backwards; }
+.verify-btn { --order: 3; animation: fadeIn 0.5s ease 0.2s backwards; }
+.resend-btn { --order: 4; animation: fadeIn 0.5s ease 0.25s backwards; }
 
 @keyframes fadeIn {
   from {
@@ -741,7 +793,10 @@ select.input-field:focus {
   }
 }
 
-/* CUSTOM SCROLLBAR */
+/* ========================================
+   CUSTOM SCROLLBAR
+======================================== */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -759,14 +814,20 @@ select.input-field:focus {
   background: var(--primary-dark);
 }
 
-/* FOCUS VISIBILITY FOR ACCESSIBILITY */
+/* ========================================
+   FOCUS VISIBILITY FOR ACCESSIBILITY
+======================================== */
+
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
-/* PRINT STYLES */
+/* ========================================
+   PRINT STYLES
+======================================== */
+
 @media print {
   .top-navbar,
   #scrollTopBtn {
@@ -778,9 +839,8 @@ select.input-field:focus {
     padding: 0;
   }
   
-  .register-card {
+  .otp-card {
     box-shadow: none;
     border: 1px solid #ddd;
-    transform: none;
   }
 }

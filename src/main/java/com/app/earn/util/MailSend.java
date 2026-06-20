@@ -42,13 +42,18 @@ public class MailSend {
 
         props.put("mail.smtp.auth", "true");
 
-        props.put("mail.smtp.starttls.enable", "true");
+      //  props.put("mail.smtp.starttls.enable", "true");
 
         props.put("mail.smtp.host",
                 "smtp-relay.brevo.com");
 
-        props.put("mail.smtp.port", "587");
-
+      //  props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", "2525");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.writetimeout", "10000");
+        props.put("mail.debug", "true");
         Session session = Session.getInstance(
                 props,
                 new Authenticator() {
@@ -123,7 +128,13 @@ public class MailSend {
 
             message.setContent(html, "text/html");
 
+          //  Transport.send(message);
+            
+            System.out.println("Before Transport.send");
+
             Transport.send(message);
+
+            System.out.println("After Transport.send");
 
             return "MAIL_SENT";
 

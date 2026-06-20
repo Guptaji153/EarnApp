@@ -180,71 +180,73 @@
 	<!-- SCROLL BUTTON -->
 	<button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
 
-	<script>
-        // Mobile menu toggle
-        const mobileToggle = document.getElementById('mobileMenuToggle');
-        const navMenu = document.getElementById('navMenu');
+	<script type="text/javascript">
+//<![CDATA[
+    // Mobile menu toggle
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
 
-        if (mobileToggle &amp;&amp; navMenu) {
-            mobileToggle.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-                mobileToggle.classList.toggle('active');
-                document.body.classList.toggle('menu-open');
-            });
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
 
-            // Close menu on link click
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                    mobileToggle.classList.remove('active');
-                    document.body.classList.remove('menu-open');
-                });
+        // Close menu on link click
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                document.body.classList.remove('menu-open');
             });
+        });
+    }
+
+    // Active link handling
+    const currentPath = window.location.pathname;
+    const links = document.querySelectorAll('.nav-link');
+    links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && currentPath.includes(href.replace('#{request.contextPath}', ''))) {
+            link.classList.add('active');
         }
+    });
 
-        // Active link handling
-        const currentPath = window.location.pathname;
-        const links = document.querySelectorAll('.nav-link');
-        links.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href &amp;&amp; currentPath.includes(href.replace('#{request.contextPath}', ''))) {
-                link.classList.add('active');
+    // Add floating animation to logo
+    const logo = document.querySelector('.register-logo-icon');
+    if (logo) {
+        setInterval(() => {
+            logo.style.transform = 'translateY(-3px)';
+            setTimeout(() => {
+                logo.style.transform = 'translateY(0)';
+            }, 300);
+        }, 3000);
+    }
+    
+    // Add input focus effects
+    const inputs = document.querySelectorAll('.input-field');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.classList.remove('focused');
             }
         });
+    });
 
-        // Add floating animation to logo
-        const logo = document.querySelector('.register-logo-icon');
-        if (logo) {
-            setInterval(() => {
-                logo.style.transform = 'translateY(-3px)';
-                setTimeout(() => {
-                    logo.style.transform = 'translateY(0)';
-                }, 300);
-            }, 3000);
-        }
-        
-        // Add input focus effects
-        const inputs = document.querySelectorAll('.input-field');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-            input.addEventListener('blur', function() {
-                if (!this.value) {
-                    this.parentElement.classList.remove('focused');
-                }
-            });
-        });
-
-        // Scroll to top button
-        const btn = document.getElementById("scrollTopBtn");
-        window.addEventListener("scroll", function() {
-            btn.style.display = window.scrollY > 300 ? "flex" : "none";
-        });
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    </script>
+    // Scroll to top button
+    const btn = document.getElementById("scrollTopBtn");
+    window.addEventListener("scroll", function() {
+        btn.style.display = window.scrollY > 300 ? "flex" : "none";
+    });
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+//]]>
+</script>
 </h:body>
 </html>

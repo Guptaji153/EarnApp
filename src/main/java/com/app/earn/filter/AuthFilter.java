@@ -68,7 +68,7 @@ public class AuthFilter implements Filter {
              || uri.contains("profile.xhtml")
 
             // || uri.contains("resetPassword.xhtml")
-
+             || uri.contains("adminLogin.xhtml")
              || uri.contains("javax.faces.resource")
 
              || uri.contains("resources")

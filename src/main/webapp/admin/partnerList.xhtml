@@ -83,15 +83,21 @@
 					<div class="table-header">
 						<span class="table-icon">📋</span>
 						<h3>Partners List</h3>
+						<h:panelGroup rendered="#{adminController.totalPartnerRecords > 0}">
+    <span class="record-badge">
+        #{adminController.totalPartnerRecords} Total
+    </span>
+</h:panelGroup>
 					</div>
 					
 					<div class="table-wrapper">
-						<h:dataTable value="#{adminController.partners}" var="p" styleClass="partner-table">
+						<h:dataTable value="#{adminController.partners}" var="p" styleClass="partner-table" rendered="#{adminController.totalPartnerRecords > 0}">
 
 							<!-- NAME -->
 							<h:column>
 								<f:facet name="header">
-									<div class="sort-container">
+									<div class="header-cell">
+										<span class="header-icon-cell">👤</span>
 										<span>Name</span>
 										<div class="sort-icons">
 											<h:commandLink value="▲"
@@ -104,7 +110,6 @@
 									</div>
 								</f:facet>
 								<div class="cell-name">
-									<span class="name-icon">👤</span>
 									<span>#{p.fullName}</span>
 								</div>
 							</h:column>
@@ -112,7 +117,8 @@
 							<!-- EMAIL -->
 							<h:column>
 								<f:facet name="header">
-									<div class="sort-container">
+									<div class="header-cell">
+										<span class="header-icon-cell">📧</span>
 										<span>Email</span>
 										<div class="sort-icons">
 											<h:commandLink value="▲"
@@ -125,7 +131,6 @@
 									</div>
 								</f:facet>
 								<div class="cell-email">
-									<span class="email-icon">📧</span>
 									<span>#{p.email}</span>
 								</div>
 							</h:column>
@@ -133,7 +138,8 @@
 							<!-- PHONE -->
 							<h:column>
 								<f:facet name="header">
-									<div class="sort-container">
+									<div class="header-cell">
+										<span class="header-icon-cell">📱</span>
 										<span>Phone</span>
 										<div class="sort-icons">
 											<h:commandLink value="▲"
@@ -146,7 +152,6 @@
 									</div>
 								</f:facet>
 								<div class="cell-phone">
-									<span class="phone-icon">📱</span>
 									<span>#{p.phone}</span>
 								</div>
 							</h:column>
@@ -154,7 +159,8 @@
 							<!-- STATUS -->
 							<h:column>
 								<f:facet name="header">
-									<div class="sort-container">
+									<div class="header-cell">
+										<span class="header-icon-cell">📌</span>
 										<span>Status</span>
 										<div class="sort-icons">
 											<h:commandLink value="▲"
@@ -179,7 +185,12 @@
 
 							<!-- ACTION -->
 							<h:column>
-								<f:facet name="header">Action</f:facet>
+								<f:facet name="header">
+									<div class="header-cell">
+										<span class="header-icon-cell">⚡</span>
+										<span>Action</span>
+									</div>
+								</f:facet>
 								<div class="action-buttons">
 									<h:commandButton value="✓ Approve" styleClass="btn-approve"
 										action="#{adminController.approvePartner(p.id)}"
@@ -190,32 +201,63 @@
 								</div>
 							</h:column>
 						</h:dataTable>
+						
+						<!-- Empty State - Shows ONLY when NO partners exist -->
+						<h:panelGroup rendered="#{adminController.totalPartnerRecords == 0}"
+              layout="block">
+
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No Partners Found</h3>
+        <p>No partners match your search criteria. Try different keywords or clear the search.</p>
+    </div>
+
+</h:panelGroup>
 					</div>
 				</div>
 
-				<!-- PAGINATION -->
-				<div class="paginationWrapper">
-					<div class="paginationLeft">
-						<h:commandButton value="← Previous"
-							styleClass="#{adminController.page == 0 ? 'pageBtnDisabled' : 'pageBtn'}"
-							action="#{adminController.previousPage}"
-							disabled="#{adminController.page == 0}" />
+				<!-- PAGINATION - Shows ONLY when partners exist -->
+			<h:panelGroup rendered="#{adminController.totalPartnerRecords > 0}"
+              layout="block">
 
-						<h:commandButton value="Next →"
-							styleClass="#{adminController.page + 1 >= adminController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}"
-							action="#{adminController.nextPage}"
-							disabled="#{adminController.page + 1 >= adminController.totalPages}" />
-					</div>
+    <div class="paginationWrapper">
 
-					<div class="paginationRight">
-						<span class="pageInfo">📄 Page #{adminController.page + 1} of #{adminController.totalPages}</span>
-						<span class="recordInfo">
-							📊 Showing #{adminController.page * adminController.pageSize + 1} -
-							#{(adminController.page * adminController.pageSize) + adminController.partners.size()} of
-							#{adminController.totalPartnerRecords} records
-						</span>
-					</div>
-				</div>
+        <div class="paginationLeft">
+
+            <h:commandButton value="← Previous"
+                styleClass="#{adminController.page == 0 ? 'pageBtnDisabled' : 'pageBtn'}"
+                action="#{adminController.previousPage}"
+                disabled="#{adminController.page == 0}" />
+
+            <h:commandButton value="Next →"
+                styleClass="#{adminController.page + 1 >= adminController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}"
+                action="#{adminController.nextPage}"
+                disabled="#{adminController.page + 1 >= adminController.totalPages}" />
+
+        </div>
+
+        <div class="paginationRight">
+
+            <span class="pageInfo">
+                📄 Page #{adminController.page + 1}
+                of #{adminController.totalPages}
+            </span>
+
+            <span class="recordInfo">
+                📊 Showing
+                #{adminController.page * adminController.pageSize + 1}
+                -
+                #{(adminController.page * adminController.pageSize) + adminController.partners.size()}
+                of
+                #{adminController.totalPartnerRecords}
+                records
+            </span>
+
+        </div>
+
+    </div>
+
+</h:panelGroup>
 			</h:form>
 		</div>
 	</div>

@@ -7,16 +7,26 @@
 <f:view>
 
 	<f:metadata>
-		<f:event type="preRenderView"
-			listener="#{authController.checkAlreadyLoggedIn}" />
-		<f:event type="preRenderView" listener="#{authController.preventBack}" />
-	</f:metadata>
+
+    <f:event
+    type="preRenderView"
+    listener="#{authController.checkAlreadyLoggedIn}" />
+
+    <f:event
+    type="preRenderView"
+    listener="#{authController.preventBack}" />
+
+    <f:event
+    type="preRenderView"
+    listener="#{authController.prepareAdminLogin}" />
+
+</f:metadata>
 
 	<h:head>
 		<meta charset="UTF-8" />
 		<meta name="viewport"
 			content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-		<title>Login | Earn</title>
+		<title>Admin Login | Earn</title>
 
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
@@ -78,8 +88,8 @@
 						<span class="login-logo-icon">💰</span> <span
 							class="login-logo-text">Earn</span>
 					</div>
-					<h2>Welcome back</h2>
-					<p>Sign in to your account to continue</p>
+					<h2>Admin Login</h2>
+					<p>Administrator access only</p>
 				</div>
 
 				<!-- Login Form -->
@@ -113,21 +123,7 @@
 						</div>
 					</div>
 
-					<!-- FIXED: Radio Button Group with proper styling -->
-					<div class="radio-group">
-						<h:outputLabel value="Login as" styleClass="input-label" />
-						<div class="radio-options">
-							<label class="radio-option">
-								<h:selectOneRadio value="#{authController.role}" 
-									required="true" 
-									requiredMessage="Please select login type"
-									layout="spread">
-									<f:selectItem itemLabel="User" itemValue="USER" />
-									<f:selectItem itemLabel="Partner" itemValue="PARTNER" />
-								</h:selectOneRadio>
-							</label>
-						</div>
-					</div>
+					
 
 					<div class="checkbox-wrapper">
 						<label class="checkbox-container"> <input type="checkbox"
@@ -135,6 +131,9 @@
 							class="checkbox-text">Remember me</span>
 						</label>
 					</div>
+
+					<h:inputHidden
+value="#{authController.role}" />
 
 					<h:commandButton value="Sign In" action="#{authController.login}"
 						styleClass="login-btn" />
@@ -148,15 +147,6 @@
 					</p>
 				</div>
 
-				<div class="admin-login-link">
-					<p>
-						Administrator Access?
-						<a href="#{request.contextPath}/adminLogin.xhtml">
-							Admin Login
-						</a>
-					</p>
-				</div>
-				
 				<!-- Social Login Options -->
 				<div class="social-login">
 					<div class="divider">
@@ -179,74 +169,72 @@
 		<!-- SCROLL BUTTON -->
 		<button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
 
-		<script type="text/javascript">
-		//<![CDATA[
-			// Mobile menu toggle
-			const mobileToggle = document.getElementById('mobileMenuToggle');
-			const navMenu = document.getElementById('navMenu');
+		<script>
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileMenuToggle');
+        const navMenu = document.getElementById('navMenu');
 
-			if (mobileToggle && navMenu) {
-				mobileToggle.addEventListener('click', function() {
-					navMenu.classList.toggle('active');
-					mobileToggle.classList.toggle('active');
-					document.body.classList.toggle('menu-open');
-				});
+        if (mobileToggle &amp;&amp; navMenu) {
+            mobileToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                mobileToggle.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
 
-				// Close menu on link click
-				const navLinks = document.querySelectorAll('.nav-link');
-				navLinks.forEach(link => {
-					link.addEventListener('click', () => {
-						navMenu.classList.remove('active');
-						mobileToggle.classList.remove('active');
-						document.body.classList.remove('menu-open');
-					});
-				});
-			}
+            // Close menu on link click
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+        }
 
-			// Active link handling
-			const currentPath = window.location.pathname;
-			const links = document.querySelectorAll('.nav-link');
-			links.forEach(link => {
-				const href = link.getAttribute('href');
-				if (href && currentPath.includes(href.replace('#{request.contextPath}', ''))) {
-					link.classList.add('active');
-				}
-			});
+        // Active link handling
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href &amp;&amp; currentPath.includes(href.replace('#{request.contextPath}', ''))) {
+                link.classList.add('active');
+            }
+        });
 
-			// Add floating animation to logo
-			const logo = document.querySelector('.login-logo-icon');
-			if (logo) {
-				setInterval(() => {
-					logo.style.transform = 'translateY(-3px)';
-					setTimeout(() => {
-						logo.style.transform = 'translateY(0)';
-					}, 300);
-				}, 3000);
-			}
-			
-			// Add input focus effects
-			const inputs = document.querySelectorAll('.input-field');
-			inputs.forEach(input => {
-				input.addEventListener('focus', function() {
-					this.parentElement.classList.add('focused');
-				});
-				input.addEventListener('blur', function() {
-					if (!this.value) {
-						this.parentElement.classList.remove('focused');
-					}
-				});
-			});
+        // Add floating animation to logo
+        const logo = document.querySelector('.login-logo-icon');
+        if (logo) {
+            setInterval(() => {
+                logo.style.transform = 'translateY(-3px)';
+                setTimeout(() => {
+                    logo.style.transform = 'translateY(0)';
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add input focus effects
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
 
-			// Scroll to top button
-			const btn = document.getElementById("scrollTopBtn");
-			window.addEventListener("scroll", function() {
-				btn.style.display = window.scrollY > 300 ? "flex" : "none";
-			});
-			function scrollToTop() {
-				window.scrollTo({ top: 0, behavior: "smooth" });
-			}
-		//]]>
-		</script>
+        // Scroll to top button
+        const btn = document.getElementById("scrollTopBtn");
+        window.addEventListener("scroll", function() {
+            btn.style.display = window.scrollY > 300 ? "flex" : "none";
+        });
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
 	</h:body>
 
 </f:view>

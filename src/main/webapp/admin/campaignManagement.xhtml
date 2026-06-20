@@ -84,119 +84,208 @@
                     </span>
                 </div>
                 
-                <div class="table-wrapper">
-                    <h:form>
-                        <h:dataTable value="#{adminCampaignController.campaigns}" var="c" styleClass="campaign-table" rendered="#{not empty adminCampaignController.campaigns}">
-                            
-                            <!-- CAMPAIGN TITLE -->
-                            <h:column>
-                                <f:facet name="header">Campaign</f:facet>
-                                <div class="cell-title">
-                                    <span class="title-icon">🎯</span>
-                                    <h:link value="#{c.taskTitle}" outcome="/admin/campaignDetails.xhtml" styleClass="campaign-link">
-                                        <f:param name="taskId" value="#{c.taskId}"/>
-                                    </h:link>
-                                </div>
-                            </h:column>
+             <div class="table-wrapper">
+    <h:form>
 
-                            <!-- PARTNER -->
-                            <h:column>
-                                <f:facet name="header">Partner</f:facet>
-                                <div class="cell-partner">
-                                    <span class="partner-icon">🤝</span>
-                                    <span>#{c.partnerName}</span>
-                                </div>
-                            </h:column>
+        <!-- CAMPAIGNS TABLE -->
+        <h:dataTable value="#{adminCampaignController.campaigns}"
+                     var="c"
+                     styleClass="campaign-table"
+                     rendered="#{not empty adminCampaignController.campaigns}">
 
-                            <!-- STATUS -->
-                            <h:column>
-                                <f:facet name="header">Status</f:facet>
-                                <div class="cell-status">
-                                    <span class="status-badge status-#{c.status}">#{c.status}</span>
-                                </div>
-                            </h:column>
+            <!-- CAMPAIGN TITLE -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">🎯</span>
+                        <span>Campaign</span>
+                    </div>
+                </f:facet>
 
-                            <!-- LIMIT -->
-                            <h:column>
-                                <f:facet name="header">Limit</f:facet>
-                                <div class="cell-number">
-                                    <span class="number-icon">📊</span>
-                                    <span>#{c.submissionLimit}</span>
-                                </div>
-                            </h:column>
-
-                            <!-- ACCEPTED -->
-                            <h:column>
-                                <f:facet name="header">Accepted</f:facet>
-                                <div class="cell-number success">
-                                    <span class="accepted-icon">✅</span>
-                                    <span>#{c.accepted}</span>
-                                </div>
-                            </h:column>
-
-                            <!-- PENDING -->
-                            <h:column>
-                                <f:facet name="header">Pending</f:facet>
-                                <div class="cell-number warning">
-                                    <span class="pending-icon">⏳</span>
-                                    <span>#{c.pending}</span>
-                                </div>
-                            </h:column>
-
-                            <!-- REJECTED -->
-                            <h:column>
-                                <f:facet name="header">Rejected</f:facet>
-                                <div class="cell-number danger">
-                                    <span class="rejected-icon">❌</span>
-                                    <span>#{c.rejected}</span>
-                                </div>
-                            </h:column>
-
-                            <!-- SLOTS LEFT -->
-                            <h:column>
-                                <f:facet name="header">Slots Left</f:facet>
-                                <div class="cell-slots">
-                                    <div class="slots-wrapper">
-                                        <div class="slots-bar" style="width:#{c.slotsLeft / c.submissionLimit * 100}%"></div>
-                                        <span class="slots-count">#{c.slotsLeft}</span>
-                                    </div>
-                                </div>
-                            </h:column>
-                            
-                        </h:dataTable>
-                        
-                        <!-- Empty State -->
-                        <div class="empty-state" rendered="#{empty adminCampaignController.campaigns}">
-                            <div class="empty-icon">📭</div>
-                            <h3>No Campaigns Found</h3>
-                            <p>No campaigns match your search criteria. Try different keywords or clear the search.</p>
-                        </div>
-                    </h:form>
+                <div class="cell-title">
+                    <h:link value="#{c.taskTitle}"
+                            outcome="/admin/campaignDetails.xhtml"
+                            styleClass="campaign-link">
+                        <f:param name="taskId" value="#{c.taskId}" />
+                    </h:link>
                 </div>
-            </div>
+            </h:column>
 
-            <!-- PAGINATION -->
-            <div class="paginationWrapper" rendered="#{not empty adminCampaignController.campaigns}">
-                <div class="paginationLeft">
-                    <h:form>
-                        <h:commandButton value="← Previous" styleClass="#{adminCampaignController.page eq 0 ? 'pageBtnDisabled' : 'pageBtn'}" 
-                                       action="#{adminCampaignController.previousPage}" disabled="#{adminCampaignController.page eq 0}" />
+            <!-- PARTNER -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">🤝</span>
+                        <span>Partner</span>
+                    </div>
+                </f:facet>
 
-                        <span class="pageInfo">Page #{adminCampaignController.page + 1} of #{adminCampaignController.totalPages}</span>
-
-                        <h:commandButton value="Next →" styleClass="#{adminCampaignController.page + 1 ge adminCampaignController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}" 
-                                       action="#{adminCampaignController.nextPage}" disabled="#{adminCampaignController.page + 1 ge adminCampaignController.totalPages}" />
-                    </h:form>
+                <div class="cell-partner">
+                    <span>#{c.partnerName}</span>
                 </div>
+            </h:column>
 
-                <div class="paginationRight">
-                    <span class="recordInfo">
-                        📊 Showing #{adminCampaignController.page * adminCampaignController.pageSize + 1} -
-                        #{(adminCampaignController.page * adminCampaignController.pageSize) + adminCampaignController.campaigns.size()} of
-                        #{adminCampaignController.totalRecords} records
+            <!-- STATUS -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">📌</span>
+                        <span>Status</span>
+                    </div>
+                </f:facet>
+
+                <div class="cell-status">
+                    <span class="status-badge status-#{c.status}">
+                        #{c.status}
                     </span>
                 </div>
+            </h:column>
+
+            <!-- LIMIT -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">📊</span>
+                        <span>Limit</span>
+                    </div>
+                </f:facet>
+
+                <div class="cell-number">
+                    <span>#{c.submissionLimit}</span>
+                </div>
+            </h:column>
+
+            <!-- ACCEPTED -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">✅</span>
+                        <span>Accepted</span>
+                    </div>
+                </f:facet>
+
+                <div class="cell-number success">
+                    <span>#{c.accepted}</span>
+                </div>
+            </h:column>
+
+            <!-- PENDING -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">⏳</span>
+                        <span>Pending</span>
+                    </div>
+                </f:facet>
+
+                <div class="cell-number warning">
+                    <span>#{c.pending}</span>
+                </div>
+            </h:column>
+
+            <!-- REJECTED -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">❌</span>
+                        <span>Rejected</span>
+                    </div>
+                </f:facet>
+
+                <div class="cell-number danger">
+                    <span>#{c.rejected}</span>
+                </div>
+            </h:column>
+
+            <!-- SLOTS LEFT -->
+            <h:column>
+                <f:facet name="header">
+                    <div class="header-cell">
+                        <span class="header-icon-cell">📊</span>
+                        <span>Slots Left</span>
+                    </div>
+                </f:facet>
+
+                <div class="cell-slots">
+                    <div class="slots-wrapper">
+                        <div class="slots-bar"
+                             style="width:#{c.submissionLimit gt 0 ? (c.slotsLeft * 100 / c.submissionLimit) : 0}%">
+                        </div>
+
+                        <span class="slots-count">
+                            #{c.slotsLeft}
+                        </span>
+                    </div>
+                </div>
+            </h:column>
+
+        </h:dataTable>
+
+        <!-- EMPTY STATE -->
+        <h:panelGroup rendered="#{empty adminCampaignController.campaigns}"
+                      layout="block">
+
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+
+                <h3>No Campaigns Found</h3>
+
+                <p>
+                    No campaigns match your search criteria.
+                    Try different keywords or clear the search.
+                </p>
             </div>
+
+        </h:panelGroup>
+
+    </h:form>
+</div>
+            </div>
+
+       <!-- PAGINATION - Shows ONLY when campaigns exist -->
+<h:panelGroup rendered="#{not empty adminCampaignController.campaigns}"
+              layout="block">
+
+    <div class="paginationWrapper">
+
+        <div class="paginationLeft">
+            <h:form>
+
+                <h:commandButton
+                    value="← Previous"
+                    styleClass="#{adminCampaignController.page eq 0 ? 'pageBtnDisabled' : 'pageBtn'}"
+                    action="#{adminCampaignController.previousPage}"
+                    disabled="#{adminCampaignController.page eq 0}" />
+
+                <span class="pageInfo">
+                    Page #{adminCampaignController.page + 1}
+                    of #{adminCampaignController.totalPages}
+                </span>
+
+                <h:commandButton
+                    value="Next →"
+                    styleClass="#{adminCampaignController.page + 1 ge adminCampaignController.totalPages ? 'pageBtnDisabled' : 'pageBtn'}"
+                    action="#{adminCampaignController.nextPage}"
+                    disabled="#{adminCampaignController.page + 1 ge adminCampaignController.totalPages}" />
+
+            </h:form>
+        </div>
+
+        <div class="paginationRight">
+            <span class="recordInfo">
+                📊 Showing
+                #{adminCampaignController.page * adminCampaignController.pageSize + 1}
+                -
+                #{(adminCampaignController.page * adminCampaignController.pageSize) + adminCampaignController.campaigns.size()}
+                of
+                #{adminCampaignController.totalRecords}
+                records
+            </span>
+        </div>
+
+    </div>
+
+</h:panelGroup>
         </div>
     </div>
 

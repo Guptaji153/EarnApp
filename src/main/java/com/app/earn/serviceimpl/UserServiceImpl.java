@@ -158,7 +158,15 @@ public class UserServiceImpl implements UserService {
 
 		//MailSend.sendInfo(user.getEmail(), "EarnByApps OTP Verification", otpValue);
 
-		MailSend.sendInfoAsync(user.getEmail(), "EarnByApps OTP Verification", otpValue);
+		//MailSend.sendInfoAsync(user.getEmail(), "EarnByApps OTP Verification", otpValue);
+		String result =
+				MailSend.sendInfo(
+				    user.getEmail(),
+				    "EarnByApps OTP Verification",
+				    otpValue
+				);
+
+				System.out.println("MAIL RESULT = " + result);
 		return "OTP_SENT";
 	}
 

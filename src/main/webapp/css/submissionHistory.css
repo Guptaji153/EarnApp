@@ -375,13 +375,13 @@ body {
 .search-controls {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
   flex-wrap: wrap;
+  align-items: flex-end;
 }
 
 .search-input-wrapper {
-  flex: 1;
-  min-width: 250px;
+  flex: 2;
+  min-width: 200px;
 }
 
 .search-input {
@@ -428,10 +428,12 @@ body {
 .btn-showall {
   background: var(--gray-100);
   color: var(--gray-700);
+  border: 2px solid var(--gray-300);
 }
 
 .btn-showall:hover {
-  background: var(--gray-300);
+  background: var(--gray-200);
+  border-color: var(--gray-500);
   transform: translateY(-2px);
 }
 
@@ -439,7 +441,9 @@ body {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
 }
 
 .radio-label {
@@ -450,12 +454,22 @@ body {
 
 .radio-group {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.85rem;
-  color: var(--gray-600);
+  color: var(--gray-700);
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
   cursor: pointer;
 }
 
@@ -505,6 +519,7 @@ body {
 .submission-history-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 1000px;
 }
 
 .submission-history-table th {
@@ -519,55 +534,64 @@ body {
   border-bottom: 2px solid var(--gray-200);
 }
 
-.submission-history-table td {
-  padding: 1rem 1.2rem;
-  border-bottom: 1px solid var(--gray-100);
-  vertical-align: middle;
-  transition: background var(--transition-fast);
-}
-
-.submission-history-table tr:hover td {
-  background: var(--gray-50);
-}
-
-/* Sort Styles */
-.sort-container {
+/* Header cell - flex row with icons on right */
+.header-cell {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
+/* Sort Styles - icons on right side */
 .sort-icons {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  line-height: 0.8;
+  margin-left: 0.5rem;
+  gap: 0;
+  flex-shrink: 0;
 }
 
 .sort-icons a {
   text-decoration: none;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   color: var(--gray-400);
+  line-height: 1.2;
+  padding: 0 0.15rem;
   transition: color var(--transition-fast);
 }
 
 .sort-icons a.active {
   color: var(--primary);
+  font-weight: 700;
 }
 
 .sort-icons a:hover {
   color: var(--primary);
 }
 
-/* Cell Styles */
+.submission-history-table td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+/* Clickable row styles */
+.clickable-row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.clickable-row:hover {
+  background-color: var(--gray-50);
+}
+
+/* Cell Styles - No icons */
 .cell-taskid, .cell-user, .cell-proof, .cell-status, .cell-reason, .cell-verifiedby, .cell-date {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-}
-
-.taskid-icon, .user-icon, .proof-icon, .date-icon, .verified-icon {
-  font-size: 1rem;
+  padding-left: 0.5rem;
 }
 
 .taskid-link {
@@ -604,12 +628,6 @@ body {
 .proof-link:hover {
   background: var(--primary-bg-light);
   transform: translateY(-1px);
-}
-
-.no-proof {
-  color: var(--gray-400);
-  font-size: 0.8rem;
-  font-style: italic;
 }
 
 .reason-text {
@@ -685,6 +703,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .pageBtn {
@@ -696,6 +715,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all var(--transition-fast);
+  font-family: inherit;
 }
 
 .pageBtn:hover {
@@ -710,6 +730,7 @@ body {
   padding: 0.6rem 1.2rem;
   border-radius: var(--radius-md);
   cursor: not-allowed;
+  font-family: inherit;
 }
 
 .paginationRight {

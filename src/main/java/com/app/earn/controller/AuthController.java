@@ -154,6 +154,10 @@ public class AuthController implements Serializable {
 		return null;
 	}
 
+	public void prepareAdminLogin() {
+
+	    this.role = "ADMIN";
+	}
 	// getters setters
 
 	public String getEmail() {

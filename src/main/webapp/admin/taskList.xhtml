@@ -28,62 +28,85 @@
 
         <!-- MAIN CONTENT -->
         <div class="main">
-            <!-- HEADER with Gradient -->
-            <div class="header">
-                <div class="header-content">
-                    <div class="header-icon">📋</div>
-                    <div>
-                        <h2>Pending Campaign Reviews</h2>
-                        <p>Review and approve pending campaigns before they go live</p>
+            <h:form>
+                <!-- HEADER with Gradient -->
+                <div class="header">
+                    <div class="header-content">
+                        <div class="header-icon">📋</div>
+                        <div>
+                            <h2>Pending Campaign Reviews</h2>
+                            <p>Review and approve pending campaigns before they go live</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- MESSAGES -->
-            <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" 
-                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" />
+                <!-- MESSAGES -->
+                <h:messages infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" 
+                           errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;" />
 
-            <!-- TABLE SECTION -->
-            <div class="tableCard">
-                <div class="table-header">
-                    <span class="table-icon">🎯</span>
-                    <h3>Campaigns Awaiting Review</h3>
-                </div>
-                
-                <div class="table-wrapper">
-                    <h:form>
-                        <h:dataTable value="#{adminController.draftTasks}" var="t" styleClass="task-table">
+                <!-- TABLE SECTION -->
+                <div class="tableCard">
+                    <div class="table-header">
+                        <span class="table-icon">🎯</span>
+                        <h3>Campaigns Awaiting Review</h3>
+                        <h:panelGroup rendered="#{not empty adminController.draftTasks}">
+                            <span class="record-badge">
+                                #{adminController.draftTasks.size()} Pending
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <!-- Table - Shows ONLY when draft tasks exist -->
+                        <h:dataTable value="#{adminController.draftTasks}" var="t" styleClass="task-table" rendered="#{not empty adminController.draftTasks}">
                             
                             <!-- TITLE -->
                             <h:column>
-                                <f:facet name="header">Campaign Title</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">📢</span>
+                                        <span>Campaign Title</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-title">
-                                    <span class="title-icon">📢</span>
                                     <span class="title-text">#{t.title}</span>
                                 </div>
                             </h:column>
 
                             <!-- REWARD -->
                             <h:column>
-                                <f:facet name="header">Reward</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">💰</span>
+                                        <span>Reward</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-reward">
-                                    <span class="reward-icon">💰</span>
                                     <span class="reward-amount">₹#{t.reward}</span>
                                 </div>
                             </h:column>
 
                             <!-- COUNTRY -->
                             <h:column>
-                                <f:facet name="header">Country</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">🌍</span>
+                                        <span>Country</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-country">
-                                    <span class="country-icon">🌍</span>
                                     <span>#{t.country}</span>
                                 </div>
                             </h:column>
 
                             <!-- ACTION -->
                             <h:column>
-                                <f:facet name="header">Action</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">⚡</span>
+                                        <span>Action</span>
+                                    </div>
+                                </f:facet>
                                 <div class="action-buttons">
                                     <h:commandButton value="Review Campaign" styleClass="btn-review"
                                         onclick="window.location='reviewTask.xhtml?taskId=#{t.id}'; return false;" />
@@ -92,24 +115,26 @@
                             
                         </h:dataTable>
                         
-                        <!-- Empty State -->
-                        <div class="empty-state" rendered="#{empty adminController.draftTasks}">
-                            <div class="empty-icon">✅</div>
-                            <h3>No Pending Reviews</h3>
-                            <p>All campaigns have been reviewed. Check back later for new submissions.</p>
-                        </div>
-                    </h:form>
+                        <!-- Empty State - Shows ONLY when NO draft tasks exist -->
+                        <h:panelGroup rendered="#{empty adminController.draftTasks}" layout="block">
+                            <div class="empty-state">
+                                <div class="empty-icon">✅</div>
+                                <h3>No Pending Reviews</h3>
+                                <p>All campaigns have been reviewed. Check back later for new submissions.</p>
+                            </div>
+                        </h:panelGroup>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- INFO SECTION -->
-            <div class="info">
-                <div class="info-header">
-                    <span class="info-icon">ℹ️</span>
-                    <h3>Review Guidelines</h3>
+                
+                <!-- INFO SECTION -->
+                <div class="info">
+                    <div class="info-header">
+                        <span class="info-icon">ℹ️</span>
+                        <h3>Review Guidelines</h3>
+                    </div>
+                    <p>Review each campaign carefully before approval. Ensure that the campaign follows platform guidelines, has appropriate rewards, and targets the correct audience. Approved campaigns will be immediately visible to users.</p>
                 </div>
-                <p>Review each campaign carefully before approval. Ensure that the campaign follows platform guidelines, has appropriate rewards, and targets the correct audience. Approved campaigns will be immediately visible to users.</p>
-            </div>
+            </h:form>
         </div>
     </div>
 

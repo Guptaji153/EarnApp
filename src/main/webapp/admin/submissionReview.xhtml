@@ -28,67 +28,77 @@
 
         <!-- MAIN CONTENT -->
         <div class="main">
-            <!-- HEADER with Gradient -->
-            <div class="header">
-                <div class="header-content">
-                    <div class="header-icon">📝</div>
-                    <div>
-                        <h2>Submission Review</h2>
-                        <p>Review and moderate user task submissions</p>
+            <h:form id="submissionForm">
+                <!-- HEADER with Gradient -->
+                <div class="header">
+                    <div class="header-content">
+                        <div class="header-icon">📝</div>
+                        <div>
+                            <h2>Submission Review</h2>
+                            <p>Review and moderate user task submissions</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- MESSAGES -->
-            <h:messages globalOnly="true" 
-                       infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
-                       errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
+                <!-- MESSAGES -->
+                <h:messages globalOnly="true" 
+                           infoStyle="color: #0f766e; background: #ccfbf1; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" 
+                           errorStyle="color: #dc2626; background: #fee2e2; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: block;" />
 
-            <!-- TABLE SECTION -->
-            <div class="tableCard">
-                <div class="table-header">
-                    <span class="table-icon">📋</span>
-                    <h3>Pending Task Submissions</h3>
-                    <span class="pending-count" rendered="#{not empty adminSubmissionController.pendingSubmissions}">
-                        #{adminSubmissionController.pendingSubmissions.size()} Pending
-                    </span>
-                </div>
-                
-                <div class="table-wrapper">
-                    <h:form id="submissionForm">
-                        <h:dataTable value="#{adminSubmissionController.pendingSubmissions}" var="s" styleClass="submission-table">
+                <!-- TABLE SECTION -->
+                <div class="tableCard">
+                    <div class="table-header">
+                        <span class="table-icon">📋</span>
+                        <h3>Pending Task Submissions</h3>
+                        <h:panelGroup rendered="#{not empty adminSubmissionController.pendingSubmissions}">
+                            <span class="pending-count">
+                                #{adminSubmissionController.pendingSubmissions.size()} Pending
+                            </span>
+                        </h:panelGroup>
+                    </div>
+                    
+                    <div class="table-wrapper">
+                        <!-- Table - Shows ONLY when pending submissions exist -->
+                        <h:dataTable value="#{adminSubmissionController.pendingSubmissions}" var="s" styleClass="submission-table" rendered="#{not empty adminSubmissionController.pendingSubmissions}">
                             
-                            <!-- TASK ID - Hidden but used for row click -->
-                            <h:column style="display:none;">
-                                <h:outputText value="#{s.taskId}" id="taskId_#{s.id}"/>
-                            </h:column>
-                            
-                            <!-- Make entire row clickable with onclick -->
+                            <!-- TASK ID -->
                             <h:column>
-                                <f:facet name="header">Task ID</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">🎯</span>
+                                        <span>Task ID</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-taskid" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
-                                    <span class="taskid-icon">🎯</span>
                                     <span class="taskid-link">#{s.taskId}</span>
                                 </div>
                             </h:column>
 
-                            <!-- USER - Clickable -->
+                            <!-- USER -->
                             <h:column>
-                                <f:facet name="header">User</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">👤</span>
+                                        <span>User</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-user" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
-                                    <span class="user-icon">👤</span>
                                     <span class="user-name">#{s.userName}</span>
                                 </div>
                             </h:column>
 
                             <!-- PROOF -->
                             <h:column>
-                                <f:facet name="header">Proof</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">📎</span>
+                                        <span>Proof</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-proof">
                                     <h:panelGroup rendered="#{not empty s.proofPath}">
                                         <h:outputLink value="#{request.contextPath}/image" target="_blank" styleClass="proof-link" onclick="event.stopPropagation();">
                                             <f:param name="path" value="#{s.proofPath}" />
-                                            <span class="proof-icon">📎</span>
                                             View Proof
                                         </h:outputLink>
                                     </h:panelGroup>
@@ -98,22 +108,30 @@
                                 </div>
                             </h:column>
 
-                            <!-- DATE - Clickable -->
+                            <!-- DATE -->
                             <h:column>
-                                <f:facet name="header">Submitted</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">📅</span>
+                                        <span>Submitted</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-date" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
-                                    <span class="date-icon">📅</span>
                                     <h:outputText value="#{s.submittedAt}">
                                         <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
                                     </h:outputText>
                                 </div>
                             </h:column>
 
-                            <!-- REJECT REASON - Clickable -->
+                            <!-- REJECT REASON -->
                             <h:column>
-                                <f:facet name="header">Reject Reason</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">💬</span>
+                                        <span>Reject Reason</span>
+                                    </div>
+                                </f:facet>
                                 <div class="cell-reason" onclick="window.location='submissionDetails.xhtml?taskId=#{s.taskId}'; return false;" style="cursor:pointer;">
-                                    <span class="reason-icon">💬</span>
                                     <div class="reason-wrapper" onclick="event.stopPropagation();">
                                         <h:inputText id="reason_#{s.id}" value="#{s.rejectionReason}" styleClass="reason-input" placeholder="Enter reason for rejection..."/>
                                         <h:message for="reason_#{s.id}" styleClass="field-error"/>
@@ -123,7 +141,12 @@
 
                             <!-- ACTIONS -->
                             <h:column>
-                                <f:facet name="header">Action</f:facet>
+                                <f:facet name="header">
+                                    <div class="header-cell">
+                                        <span class="header-icon-cell">⚡</span>
+                                        <span>Action</span>
+                                    </div>
+                                </f:facet>
                                 <div class="action-buttons" onclick="event.stopPropagation();">
                                     <h:commandButton value="✓ Approve" styleClass="btn-approve" action="#{adminSubmissionController.approve(s.id)}"/>
                                     <h:commandButton value="✗ Reject" styleClass="btn-reject" action="#{adminSubmissionController.reject(s.id, s.rejectionReason)}"/>
@@ -132,29 +155,31 @@
                             
                         </h:dataTable>
                         
-                        <!-- Empty State -->
-                        <div class="empty-state" rendered="#{empty adminSubmissionController.pendingSubmissions}">
-                            <div class="empty-icon">✅</div>
-                            <h3>No Pending Submissions</h3>
-                            <p>All user submissions have been reviewed. Check back later for new submissions.</p>
-                        </div>
-                    </h:form>
+                        <!-- Empty State - Shows ONLY when NO pending submissions exist -->
+                        <h:panelGroup rendered="#{empty adminSubmissionController.pendingSubmissions}" layout="block">
+                            <div class="empty-state">
+                                <div class="empty-icon">✅</div>
+                                <h3>No Pending Submissions</h3>
+                                <p>All user submissions have been reviewed. Check back later for new submissions.</p>
+                            </div>
+                        </h:panelGroup>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- INFO SECTION -->
-            <div class="info">
-                <div class="info-header">
-                    <span class="info-icon">ℹ️</span>
-                    <h3>Review Guidelines</h3>
+                
+                <!-- INFO SECTION -->
+                <div class="info">
+                    <div class="info-header">
+                        <span class="info-icon">ℹ️</span>
+                        <h3>Review Guidelines</h3>
+                    </div>
+                    <p>Review each submission carefully. Approve valid submissions that meet task requirements. Reject submissions that don't meet criteria and provide a clear reason to help users understand what went wrong.</p>
                 </div>
-                <p>Review each submission carefully. Approve valid submissions that meet task requirements. Reject submissions that don't meet criteria and provide a clear reason to help users understand what went wrong.</p>
-            </div>
+            </h:form>
         </div>
     </div>
 
     <!-- MOBILE MENU SCRIPT -->
-      <script type="text/javascript">
+    <script type="text/javascript">
 
 //<![CDATA[
 
@@ -249,8 +274,7 @@ window.addEventListener("load", function(){
 });
 
 //]]>
-  
 
-   </script>
+</script>
 </h:body>
 </html>

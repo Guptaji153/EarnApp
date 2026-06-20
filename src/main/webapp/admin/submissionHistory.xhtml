@@ -111,7 +111,7 @@
                                     </div>
                                 </f:facet>
                                 <div class="cell-taskid">
-                                    <span class="taskid-icon">🎯</span>
+                                    
                                     <h:link outcome="/admin/submissionHistoryDetails.xhtml" styleClass="taskid-link">
                                         <f:param name="submissionId" value="#{s.id}" />
                                         #{s.taskId}
@@ -135,7 +135,7 @@
                                     </div>
                                 </f:facet>
                                 <div class="cell-user">
-                                    <span class="user-icon">👤</span>
+                                    
                                     <span class="user-name">#{s.userName}</span>
                                 </div>
                             </h:column>
@@ -146,10 +146,10 @@
                                 <div class="cell-proof">
                                     <h:outputLink value="#{request.contextPath}/image" target="_blank" styleClass="proof-link" rendered="#{not empty s.proofPath}">
                                         <f:param name="path" value="#{s.proofPath}" />
-                                        <span class="proof-icon">📎</span>
+                                        
                                         View Proof
                                     </h:outputLink>
-                                    <span class="no-proof" rendered="#{empty s.proofPath}">No Proof</span>
+                                    
                                 </div>
                             </h:column>
 
@@ -185,7 +185,7 @@
                             <h:column>
                                 <f:facet name="header">Verified By</f:facet>
                                 <div class="cell-verifiedby">
-                                    <span class="verified-icon">✓</span>
+                                   
                                     <span>#{empty s.adminName ? 'System' : s.adminName}</span>
                                 </div>
                             </h:column>
@@ -206,7 +206,7 @@
                                     </div>
                                 </f:facet>
                                 <div class="cell-date">
-                                    <span class="date-icon">📅</span>
+                                   
                                     <h:outputText value="#{s.submittedAt}">
                                         <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
                                     </h:outputText>
@@ -217,7 +217,7 @@
                             <h:column>
                                 <f:facet name="header">Verified</f:facet>
                                 <div class="cell-date">
-                                    <span class="date-icon">✅</span>
+                                  
                                     <h:outputText value="#{s.verifiedAt}" rendered="#{not empty s.verifiedAt}">
                                         <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Kolkata"/>
                                     </h:outputText>
@@ -228,11 +228,7 @@
                         </h:dataTable>
                         
                         <!-- Empty State -->
-                        <div class="empty-state" rendered="#{empty adminSubmissionController.allSubmissions}">
-                            <div class="empty-icon">📭</div>
-                            <h3>No Submissions Found</h3>
-                            <p>No submissions match your search criteria. Try different keywords or clear the search.</p>
-                        </div>
+                       
                     </h:form>
                 </div>
             </div>
